@@ -64,7 +64,7 @@ public final class ResyncDisplays {
             byte[] bytes = encode(display, kind, BasicDisplay.registryAccess());
             return kind + ":" + HexFormat.of().formatHex(digest().digest(bytes));
         } catch (Throwable throwable) {
-            return kind + ":identity:" + System.identityHashCode(display);
+            return kind + ":unencodable:" + display.category() + ":" + display.getDisplayLocation().orElse(null);
         }
     }
 
