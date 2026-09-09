@@ -16,9 +16,11 @@ import net.fabricmc.loader.api.FabricLoader;
 public final class ViewerConfig {
     public static final String FILE_NAME = CreateReiViewer.MOD_ID + ".json";
     public static final String FIX_SEQUENCED_ASSEMBLY_SYNC = "fixSequencedAssemblySync";
+    public static final String RESYNC_AFTER_RELOAD = "resyncAfterReload";
 
     private static boolean loaded;
     private static boolean fixSequencedAssemblySync;
+    private static boolean resyncAfterReload = true;
 
     private ViewerConfig() {
     }
@@ -30,6 +32,13 @@ public final class ViewerConfig {
         return fixSequencedAssemblySync;
     }
 
+    public static synchronized boolean resyncAfterReload() {
+        if (!loaded) {
+            load();
+        }
+        return resyncAfterReload;
+    }
+
     public static Path path() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
     }
@@ -37,6 +46,7 @@ public final class ViewerConfig {
     private static void load() {
         loaded = true;
         fixSequencedAssemblySync = false;
+        resyncAfterReload = true;
         Path file = path();
         if (!Files.isRegularFile(file)) {
             write(file);
@@ -49,12 +59,22 @@ public final class ViewerConfig {
                 return;
             }
             JsonObject object = root.getAsJsonObject();
-            JsonElement value = object.get(FIX_SEQUENCED_ASSEMBLY_SYNC);
-            if (value == null) {
-                write(file);
-                return;
+            boolean complete = true;
+            JsonElement fix = object.get(FIX_SEQUENCED_ASSEMBLY_SYNC);
+            if (fix == null) {
+                complete = false;
+            } else {
+                fixSequencedAssemblySync = fix.getAsBoolean();
             }
-            fixSequencedAssemblySync = value.getAsBoolean();
+            JsonElement resync = object.get(RESYNC_AFTER_RELOAD);
+            if (resync == null) {
+                complete = false;
+            } else {
+                resyncAfterReload = resync.getAsBoolean();
+            }
+            if (!complete) {
+                write(file);
+            }
         } catch (IOException | RuntimeException e) {
             CreateReiViewer.LOGGER.warn("Could not read {}, using defaults: {}", file, e.toString());
         }
@@ -63,6 +83,7 @@ public final class ViewerConfig {
     private static void write(Path file) {
         JsonObject object = new JsonObject();
         object.addProperty(FIX_SEQUENCED_ASSEMBLY_SYNC, fixSequencedAssemblySync);
+        object.addProperty(RESYNC_AFTER_RELOAD, resyncAfterReload);
         try {
             Files.createDirectories(file.getParent());
             try (Writer writer = Files.newBufferedWriter(file)) {
