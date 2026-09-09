@@ -4,6 +4,7 @@ import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import dev.chaevsfe.createreiviewer.api.CreateReiClientReport;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
+import dev.chaevsfe.createreiviewer.display.CreateReiSerializers;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,6 +27,8 @@ public class CreateReiViewerClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        CreateReiSerializers.register("client startup");
+        ClientPlayConnectionEvents.INIT.register((handler, client) -> CreateReiSerializers.register("connection setup"));
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ticksSinceJoin = 0;
             lastTotal = -1;

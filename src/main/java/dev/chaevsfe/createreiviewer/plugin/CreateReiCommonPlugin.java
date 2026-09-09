@@ -25,6 +25,7 @@ import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplays;
 import dev.chaevsfe.createreiviewer.display.CreateReiGridDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiSequenceDisplay;
+import dev.chaevsfe.createreiviewer.display.CreateReiSerializers;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
@@ -49,10 +50,7 @@ import java.util.List;
 public class CreateReiCommonPlugin implements REICommonPlugin {
     @Override
     public void registerDisplaySerializer(DisplaySerializerRegistry registry) {
-        registry.register(CreateReiDisplay.serializerId(), CreateReiDisplay.SERIALIZER);
-        registry.register(CreateReiGridDisplay.serializerId(), CreateReiGridDisplay.SERIALIZER);
-        registry.register(CreateReiSequenceDisplay.serializerId(), CreateReiSequenceDisplay.SERIALIZER);
-        CreateReiViewer.LOGGER.info("Registered 3 display serializers");
+        CreateReiSerializers.register("the plugin reload", registry);
     }
 
     @Override
