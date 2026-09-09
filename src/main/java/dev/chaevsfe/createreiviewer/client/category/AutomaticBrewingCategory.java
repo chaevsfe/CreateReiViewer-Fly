@@ -9,30 +9,31 @@ import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.minecraft.world.item.Items;
 
-public class MixingCategory extends BasinCategory {
-    public MixingCategory() {
-        super("create.recipe.mixing");
+public class AutomaticBrewingCategory extends BasinCategory {
+    public AutomaticBrewingCategory() {
+        super("create.recipe.automatic_brewing");
     }
 
     @Override
     public CategoryIdentifier<? extends CreateReiDisplay> getCategoryIdentifier() {
-        return CreateReiCategories.MIXING;
+        return CreateReiCategories.AUTOMATIC_BREWING;
     }
 
     @Override
     public Renderer getIcon() {
-        return new TwoItemRenderer(AllItems.MECHANICAL_MIXER, AllItems.BASIN);
+        return new TwoItemRenderer(AllItems.MECHANICAL_MIXER, Items.BREWING_STAND);
     }
 
     @Override
     protected void build(CreateReiDisplay display, Panel panel) {
-        HeatCondition heat = heatOf(display);
-        int outputCount = display.outputs().size();
-        basinBackground(panel, heat, outputCount);
+        basinBackground(panel, HeatCondition.HEATED, 1);
         panel.pip(91, -5, MixingBasinRenderState::new);
-        basinInputs(panel, display);
-        basinOutputs(panel, display, outputCount <= 4 ? 51 : 60);
-        heatSlots(panel, display);
+        panel.slot(21, 51, display.inputs().get(0));
+        panel.slot(40, 51, display.inputs().get(1));
+        panel.output(142, 51, display.outputs().get(0), 1.0f);
+        panel.bareSlot(134, 81, EntryIngredients.of(AllItems.BLAZE_BURNER));
     }
 }

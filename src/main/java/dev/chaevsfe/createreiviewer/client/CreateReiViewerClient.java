@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import java.util.List;
 
 public class CreateReiViewerClient implements ClientModInitializer {
-    private static final List<CategoryIdentifier<CreateReiDisplay>> CATEGORIES = List.of(CreateReiCategories.MIXING);
+    private static final List<CategoryIdentifier<? extends CreateReiDisplay>> CATEGORIES = CreateReiCategories.ALL;
     private static final int POLL_INTERVAL_TICKS = 20;
     private static final int GIVE_UP_TICKS = 600;
 
@@ -41,13 +41,13 @@ public class CreateReiViewerClient implements ClientModInitializer {
         }
         int total = 0;
         StringBuilder detail = new StringBuilder();
-        for (CategoryIdentifier<CreateReiDisplay> category : CATEGORIES) {
+        for (CategoryIdentifier<? extends CreateReiDisplay> category : CATEGORIES) {
             int count = countDisplays(category);
             total += count;
             if (!detail.isEmpty()) {
                 detail.append(", ");
             }
-            detail.append(category.getIdentifier()).append('=').append(count);
+            detail.append(category.getPath()).append('=').append(count);
         }
         if (total > 0) {
             reported = true;
@@ -64,7 +64,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
         }
     }
 
-    private static int countDisplays(CategoryIdentifier<CreateReiDisplay> category) {
+    private static int countDisplays(CategoryIdentifier<? extends CreateReiDisplay> category) {
         try {
             return DisplayRegistry.getInstance().get(category).size();
         } catch (Exception exception) {
