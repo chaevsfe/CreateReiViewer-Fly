@@ -141,13 +141,24 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
             .filterType(RecipeType.STONECUTTING)
             .fillMultiple(derived::blockCutting);
 
-        for (CreateReiDisplay display : derived.mysteryConversions()) {
+        List<CreateReiDisplay> mysteries = derived.mysteryConversions();
+        for (CreateReiDisplay display : mysteries) {
             registry.add(display);
         }
-        for (CreateReiDisplay display : derived.fluidTransfers()) {
+        List<CreateReiDisplay> transfers = derived.fluidTransfers();
+        int derivedDraining = 0;
+        for (CreateReiDisplay display : transfers) {
             registry.add(display);
+            if (display.category().equals(CreateReiDisplays.identifierOf(CreateReiCategories.DRAINING))) {
+                derivedDraining++;
+            }
         }
-
+        CreateReiViewer.LOGGER.info(
+            "Derived without recipe files: {} mystery conversions, {} drainings, {} spout fillings",
+            mysteries.size(),
+            derivedDraining,
+            transfers.size() - derivedDraining
+        );
         CreateReiViewer.LOGGER.info("Recipe fillers registered for {} categories", CreateReiCategories.ALL.size());
     }
 
