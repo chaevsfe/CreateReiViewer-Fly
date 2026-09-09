@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "dev.chaevsfe.createreiviewer.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "minVersion": "0.8.3",
+  "mixins": [
+    "RecipeSerializerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

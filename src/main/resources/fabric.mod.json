@@ -32,6 +32,7 @@
     ]
   },
   "mixins": [
+    "createreiviewer.mixins.json",
     {
       "config": "createreiviewer.client.mixins.json",
       "environment": "client"
