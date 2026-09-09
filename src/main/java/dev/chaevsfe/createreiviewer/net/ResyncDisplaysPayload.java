@@ -13,7 +13,7 @@ public record ResyncDisplaysPayload(int serverTotal, boolean last, List<ResyncDi
     }
 
     public static final CustomPacketPayload.Type<ResyncDisplaysPayload> TYPE =
-        CustomPacketPayload.createType(CreateReiViewer.MOD_ID + ":resync_displays");
+        new CustomPacketPayload.Type<>(CreateReiViewer.id("resync_displays"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ResyncDisplaysPayload> STREAM_CODEC = StreamCodec.of(
         ResyncDisplaysPayload::write,

@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record ResyncRequestPayload(int createHeld, int reiHeld) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ResyncRequestPayload> TYPE =
-        CustomPacketPayload.createType(CreateReiViewer.MOD_ID + ":resync_request");
+        new CustomPacketPayload.Type<>(CreateReiViewer.id("resync_request"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ResyncRequestPayload> STREAM_CODEC = StreamCodec.of(
         (buf, payload) -> {
