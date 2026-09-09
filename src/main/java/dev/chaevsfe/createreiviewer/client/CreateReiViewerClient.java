@@ -28,6 +28,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CreateReiSerializers.register("client startup");
+        ResyncClient.init();
         ClientPlayConnectionEvents.INIT.register((handler, client) -> CreateReiSerializers.register("connection setup"));
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ticksSinceJoin = 0;
@@ -41,7 +42,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
     }
 
     private void tick() {
-        if (ticksSinceJoin < 0 || reported) {
+        if (ticksSinceJoin < 0) {
             return;
         }
         ticksSinceJoin++;
@@ -60,7 +61,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
         }
         if (total > 0 && total == lastTotal) {
             stablePolls++;
-            if (stablePolls >= STABLE_POLLS) {
+            if (!reported && stablePolls >= STABLE_POLLS) {
                 reported = true;
                 CreateReiViewer.LOGGER.info(
                     "Client settled on {} synced Create displays after {} ticks, out of {} displays REI holds ({})",
@@ -75,6 +76,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
         }
         if (total != lastTotal) {
             stablePolls = 0;
+            reported = false;
             CreateReiViewer.LOGGER.info("Client has {} synced Create displays after {} ticks, still arriving", total, ticksSinceJoin);
             lastTotal = total;
             return;

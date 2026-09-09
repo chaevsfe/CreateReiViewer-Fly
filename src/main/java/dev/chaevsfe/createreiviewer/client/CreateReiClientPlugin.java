@@ -27,6 +27,8 @@ import dev.chaevsfe.createreiviewer.client.category.SpoutFillingCategory;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
+import me.shedaniel.rei.api.common.plugins.PluginManager;
+import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 
 public class CreateReiClientPlugin implements REIClientPlugin {
@@ -89,5 +91,12 @@ public class CreateReiClientPlugin implements REIClientPlugin {
         }
 
         CreateReiViewer.LOGGER.info("Registered {} REI categories", CreateReiCategories.ALL.size());
+    }
+
+    @Override
+    public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage) {
+        if (stage == ReloadStage.END) {
+            ResyncClient.onReloadEnded();
+        }
     }
 }
