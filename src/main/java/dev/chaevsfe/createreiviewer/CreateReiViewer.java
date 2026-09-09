@@ -2,6 +2,8 @@ package dev.chaevsfe.createreiviewer;
 
 import dev.chaevsfe.createreiviewer.compat.jei.SequencedAssemblySyncFix;
 import dev.chaevsfe.createreiviewer.config.ViewerConfig;
+import dev.chaevsfe.createreiviewer.net.ResyncPayloads;
+import dev.chaevsfe.createreiviewer.net.ResyncServer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
@@ -19,6 +21,8 @@ public class CreateReiViewer implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Create Fly Recipe Viewer loaded");
+        ResyncPayloads.register();
+        ResyncServer.register();
         if (ViewerConfig.fixSequencedAssemblySync()) {
             SequencedAssemblySyncFix.apply();
         } else if (recipeViewerNeedingTheFix() != null) {
