@@ -62,6 +62,7 @@ tasks.processResources {
         "version" to project.version.toString(),
         "minecraft_dependency_version" to project.property("minecraft_dependency_version") as String,
         "fabric_loader_version" to project.property("fabric_loader_version") as String,
+        "fabric_api_version_range" to project.property("fabric_api_version_range") as String,
         "create_fabric_version_range" to project.property("create_fabric_version_range") as String,
         "rei_version_range" to project.property("rei_version_range") as String,
         "architectury_version_range" to project.property("architectury_version_range") as String,

@@ -15,11 +15,19 @@ picture-in-picture render state each category uses. No Create Fly source or
 class file is copied into or redistributed by this mod; every class here is
 this project's own.
 
+Compatibility patch
+-------------------
+When Reliable Recipe Viewer is installed, one client-side mixin null-guards a
+lookup inside Create Fly's own RRV categories so that Fly's RRV support stops
+throwing. It names its targets as strings, applies only when RRV is present,
+and redistributes nothing.
+
 Linked, not bundled
 -------------------
 Textures and translation keys are referenced from Create Fly's own jar by
 identifier at runtime. Create's assets are All Rights Reserved and are not
-redistributed here. This mod ships no assets of its own.
+redistributed here. This mod ships no textures, models or translations of its
+own.
 
 Dependencies (not bundled)
 --------------------------
