@@ -35,6 +35,26 @@ recipe manager on the server and sends them to the client, so a client-only inst
 nothing. Both sides also need Create Fly, Fabric API, and REI with its own dependencies
 (Architectury API and Cloth Config).
 
+## Rejoining a running server
+
+REI's own display sync can silently lose part or all of what a server sends. The decode runs
+while REI's client-side reload is still clearing and refilling the registries it needs, every
+failure is swallowed without a log line, and REI never asks for a re-send — so a client that
+reconnects to a server that has been up for a while can end up with empty or half-empty Create
+categories and nothing to show why.
+
+This mod works around that for its own displays. Once REI reports that its reload has finished
+and its own sync has been applied, the client asks the server to send Create's displays again
+and adds back whatever is missing, so the count is the same on every join. The client logs
+
+```
+Resynced 1726 Create displays out of 1726 REI holds (...)
+```
+
+which is the line to read if a category looks empty. Set `resyncAfterReload` to `false` in
+`config/createreiviewer.json` to turn it off. REI's own vanilla displays are still affected;
+that part is upstream's to fix.
+
 ## Why REI and not JEI
 
 REI is the only recipe viewer that works properly with Create Fly on a dedicated server
