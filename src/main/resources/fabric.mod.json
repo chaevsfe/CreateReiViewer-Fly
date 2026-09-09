@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "createreiviewer",
+  "version": "${version}",
+  "name": "Create Fly: Recipe Viewer (Unofficial)",
+  "description": "Shows Create Fly's machine recipes in Roughly Enough Items on Fabric.",
+  "authors": [
+    "chaevsfe"
+  ],
+  "contact": {
+    "homepage": "https://github.com/chaevsfe/CreateReiViewer-Fly",
+    "sources": "https://github.com/chaevsfe/CreateReiViewer-Fly",
+    "issues": "https://github.com/chaevsfe/CreateReiViewer-Fly/issues",
+    "upstream": "https://modrinth.com/mod/create-fly"
+  },
+  "license": [
+    "MIT"
+  ],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.chaevsfe.createreiviewer.CreateReiViewer"
+    ],
+    "rei_common": [
+      "dev.chaevsfe.createreiviewer.plugin.CreateReiCommonPlugin"
+    ],
+    "rei_client": [
+      "dev.chaevsfe.createreiviewer.client.CreateReiClientPlugin"
+    ]
+  },
+  "accessWidener": "createreiviewer.accesswidener",
+  "depends": {
+    "minecraft": "${minecraft_dependency_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "create": "${create_fabric_version_range}",
+    "roughlyenoughitems": "${rei_version_range}",
+    "architectury": "${architectury_version_range}",
+    "java": ">=25"
+  }
+}

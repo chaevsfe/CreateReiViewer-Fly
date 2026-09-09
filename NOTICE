@@ -1,0 +1,29 @@
+Create Fly: Recipe Viewer (Unofficial)
+Copyright (c) 2026 chaevsfe
+Licensed under the MIT License; see LICENSE.
+
+This mod is an unofficial companion for Create Fly and is not affiliated with
+or endorsed by ZurrTum, the Create team, or the Roughly Enough Items authors.
+
+Specification source
+--------------------
+The recipe layouts this mod draws reproduce what Create Fly's own recipe viewer
+integration shows. Create Fly (https://modrinth.com/mod/create-fly) is released
+under CC0-1.0, and its shipped JEI and RRV plugins were read as the
+specification for slot positions, arrows, heat bars, chance outputs and which
+picture-in-picture render state each category uses. No Create Fly source or
+class file is copied into or redistributed by this mod; every class here is
+this project's own.
+
+Linked, not bundled
+-------------------
+Textures and translation keys are referenced from Create Fly's own jar by
+identifier at runtime. Create's assets are All Rights Reserved and are not
+redistributed here. This mod ships no assets of its own.
+
+Dependencies (not bundled)
+--------------------------
+- Create Fly, CC0-1.0
+- Roughly Enough Items, MIT
+- Architectury API, LGPL-3.0
+- Fabric API, Apache-2.0
