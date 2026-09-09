@@ -1,6 +1,7 @@
 package dev.chaevsfe.createreiviewer.client;
 
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
+import dev.chaevsfe.createreiviewer.api.CreateReiClientReport;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -65,6 +66,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
                     DisplayRegistry.getInstance().size(),
                     detail
                 );
+                reportAddons();
             }
             return;
         }
@@ -81,6 +83,22 @@ public class CreateReiViewerClient implements ClientModInitializer {
                 ticksSinceJoin,
                 detail
             );
+        }
+    }
+
+    private static void reportAddons() {
+        for (var group : CreateReiClientReport.groups().entrySet()) {
+            int total = 0;
+            StringBuilder detail = new StringBuilder();
+            for (CategoryIdentifier<? extends CreateReiDisplay> category : group.getValue()) {
+                int count = countDisplays(category);
+                total += count;
+                if (!detail.isEmpty()) {
+                    detail.append(", ");
+                }
+                detail.append(category.getIdentifier()).append('=').append(count);
+            }
+            CreateReiViewer.LOGGER.info("Client settled on {} synced {} displays ({})", total, group.getKey(), detail);
         }
     }
 

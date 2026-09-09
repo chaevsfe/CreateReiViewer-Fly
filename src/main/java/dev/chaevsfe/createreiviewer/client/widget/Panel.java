@@ -2,10 +2,12 @@ package dev.chaevsfe.createreiviewer.client.widget;
 
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
+import com.zurrtum.create.client.foundation.gui.render.ManualBlockRenderState;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,12 @@ public final class Panel {
         int px = ox + x;
         int py = oy + y;
         widgets.add(CreateReiWidgets.pictureInPicture(pose -> factory.create(pose, px, py)));
+    }
+
+    public void blockPip(int x, int y, BlockState state) {
+        int px = ox + x;
+        int py = oy + y;
+        widgets.add(CreateReiWidgets.pictureInPicture(pose -> new ManualBlockRenderState(pose, state, px, py)));
     }
 
     public void pipScaled(int x, int y, float scale, PipFactory factory) {
