@@ -21,6 +21,9 @@
     "main": [
       "dev.chaevsfe.createreiviewer.CreateReiViewer"
     ],
+    "client": [
+      "dev.chaevsfe.createreiviewer.client.CreateReiViewerClient"
+    ],
     "rei_common": [
       "dev.chaevsfe.createreiviewer.plugin.CreateReiCommonPlugin"
     ],

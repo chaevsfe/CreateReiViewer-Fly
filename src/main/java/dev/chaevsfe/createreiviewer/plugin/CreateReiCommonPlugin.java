@@ -7,6 +7,8 @@ import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplays;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
@@ -36,7 +38,7 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
 
     @Override
     public void postStage(PluginManager<REICommonPlugin> manager, ReloadStage stage) {
-        if (stage != ReloadStage.END) {
+        if (stage != ReloadStage.END || FabricLoader.getInstance().getEnvironmentType() != EnvType.SERVER) {
             return;
         }
         ServerDisplayRegistry registry = manager.get(ServerDisplayRegistry.class);
