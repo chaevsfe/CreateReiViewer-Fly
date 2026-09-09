@@ -41,6 +41,38 @@ public final class CreateReiEntries {
         return EntryIngredient.of(EntryStacks.of(output.create()));
     }
 
+    public static EntryIngredient template(net.minecraft.world.item.ItemStackTemplate template) {
+        return EntryIngredient.of(EntryStacks.of(template.create()));
+    }
+
+    public static EntryIngredient templates(List<net.minecraft.world.item.ItemStackTemplate> templates) {
+        List<EntryStack<?>> stacks = new ArrayList<>(templates.size());
+        for (net.minecraft.world.item.ItemStackTemplate template : templates) {
+            stacks.add(EntryStacks.of(template.create()));
+        }
+        return EntryIngredient.of(stacks);
+    }
+
+    public static EntryIngredient item(net.minecraft.world.level.ItemLike item) {
+        return EntryIngredients.of(item);
+    }
+
+    public static EntryIngredient outputs(List<ProcessingOutput> outputs) {
+        List<EntryStack<?>> stacks = new ArrayList<>(outputs.size());
+        for (ProcessingOutput output : outputs) {
+            stacks.add(EntryStacks.of(output.create()));
+        }
+        return EntryIngredient.of(stacks);
+    }
+
+    public static List<EntryIngredient> ingredients(List<Ingredient> ingredients) {
+        List<EntryIngredient> list = new ArrayList<>(ingredients.size());
+        for (Ingredient ingredient : ingredients) {
+            list.add(EntryIngredients.ofIngredient(ingredient));
+        }
+        return list;
+    }
+
     public static EntryIngredient fluid(com.zurrtum.create.infrastructure.fluids.FluidStack stack) {
         return EntryIngredient.of(EntryStacks.of(toArchitectury(stack)));
     }

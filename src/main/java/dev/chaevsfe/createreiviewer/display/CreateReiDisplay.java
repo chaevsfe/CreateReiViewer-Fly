@@ -30,6 +30,7 @@ public class CreateReiDisplay extends BasicDisplay {
         com.mojang.serialization.Codec.FLOAT.listOf().fieldOf("chances").forGetter(display -> display.chances),
         com.mojang.serialization.Codec.INT.fieldOf("duration").forGetter(display -> display.duration),
         com.mojang.serialization.Codec.INT.fieldOf("heat").forGetter(display -> display.heat),
+        com.mojang.serialization.Codec.INT.fieldOf("flags").forGetter(display -> display.flags),
         Identifier.CODEC.optionalFieldOf("location").forGetter(BasicDisplay::getDisplayLocation)
     ).apply(instance, CreateReiDisplay::new));
 
@@ -50,8 +51,9 @@ public class CreateReiDisplay extends BasicDisplay {
             }
             int duration = buf.readVarInt();
             int heat = buf.readVarInt();
+            int flags = buf.readVarInt();
             Optional<Identifier> location = buf.readOptional(Identifier.STREAM_CODEC);
-            return new CreateReiDisplay(category, inputs, catalysts, outputs, chances, duration, heat, location);
+            return new CreateReiDisplay(category, inputs, catalysts, outputs, chances, duration, heat, flags, location);
         }
 
         @Override
@@ -66,6 +68,7 @@ public class CreateReiDisplay extends BasicDisplay {
             }
             buf.writeVarInt(display.duration);
             buf.writeVarInt(display.heat);
+            buf.writeVarInt(display.flags);
             buf.writeOptional(display.getDisplayLocation(), Identifier.STREAM_CODEC);
         }
     };
@@ -79,6 +82,7 @@ public class CreateReiDisplay extends BasicDisplay {
     private final List<Float> chances;
     private final int duration;
     private final int heat;
+    private final int flags;
 
     public CreateReiDisplay(
         Identifier category,
@@ -88,6 +92,7 @@ public class CreateReiDisplay extends BasicDisplay {
         List<Float> chances,
         int duration,
         int heat,
+        int flags,
         Optional<Identifier> location
     ) {
         super(join(inputs, catalysts), List.copyOf(outputs), location);
@@ -98,6 +103,7 @@ public class CreateReiDisplay extends BasicDisplay {
         this.chances = padChances(chances, outputs.size());
         this.duration = Math.max(0, duration);
         this.heat = Math.clamp(heat, HEAT_NONE, HEAT_SUPERHEATED);
+        this.flags = flags;
     }
 
     private static List<EntryIngredient> join(List<EntryIngredient> inputs, List<EntryIngredient> catalysts) {
@@ -161,6 +167,10 @@ public class CreateReiDisplay extends BasicDisplay {
 
     public int heat() {
         return heat;
+    }
+
+    public int flags() {
+        return flags;
     }
 
     public static Identifier serializerId() {
