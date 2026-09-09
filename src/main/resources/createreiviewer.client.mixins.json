@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "dev.chaevsfe.createreiviewer.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "minVersion": "0.8.3",
+  "plugin": "dev.chaevsfe.createreiviewer.client.compat.RrvMixinPlugin",
+  "client": [
+    "RrvStackSensitiveMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

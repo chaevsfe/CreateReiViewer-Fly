@@ -31,6 +31,12 @@
       "dev.chaevsfe.createreiviewer.client.CreateReiClientPlugin"
     ]
   },
+  "mixins": [
+    {
+      "config": "createreiviewer.client.mixins.json",
+      "environment": "client"
+    }
+  ],
   "accessWidener": "createreiviewer.accesswidener",
   "depends": {
     "minecraft": "${minecraft_dependency_version}",
