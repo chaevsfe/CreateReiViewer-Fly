@@ -13,10 +13,13 @@ import java.util.List;
 
 public class CreateReiViewerClient implements ClientModInitializer {
     private static final List<CategoryIdentifier<? extends CreateReiDisplay>> CATEGORIES = CreateReiCategories.ALL;
-    private static final int POLL_INTERVAL_TICKS = 20;
-    private static final int GIVE_UP_TICKS = 600;
+    private static final int POLL_INTERVAL_TICKS = 40;
+    private static final int STABLE_POLLS = 15;
+    private static final int GIVE_UP_TICKS = 1200;
 
     private int ticksSinceJoin = -1;
+    private int lastTotal = -1;
+    private int stablePolls;
     private boolean reported;
     private boolean warned;
 
@@ -24,6 +27,8 @@ public class CreateReiViewerClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             ticksSinceJoin = 0;
+            lastTotal = -1;
+            stablePolls = 0;
             reported = false;
             warned = false;
         });
@@ -49,9 +54,24 @@ public class CreateReiViewerClient implements ClientModInitializer {
             }
             detail.append(category.getPath()).append('=').append(count);
         }
-        if (total > 0) {
-            reported = true;
-            CreateReiViewer.LOGGER.info("Client received {} synced displays after {} ticks ({})", total, ticksSinceJoin, detail);
+        if (total > 0 && total == lastTotal) {
+            stablePolls++;
+            if (stablePolls >= STABLE_POLLS) {
+                reported = true;
+                CreateReiViewer.LOGGER.info(
+                    "Client settled on {} synced Create displays after {} ticks, out of {} displays REI holds ({})",
+                    total,
+                    ticksSinceJoin,
+                    DisplayRegistry.getInstance().size(),
+                    detail
+                );
+            }
+            return;
+        }
+        if (total != lastTotal) {
+            stablePolls = 0;
+            CreateReiViewer.LOGGER.info("Client has {} synced Create displays after {} ticks, still arriving", total, ticksSinceJoin);
+            lastTotal = total;
             return;
         }
         if (ticksSinceJoin >= GIVE_UP_TICKS && !warned) {
