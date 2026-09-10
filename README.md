@@ -21,21 +21,33 @@ Add-ons can also register categories of their own.
 
 
 ## Installing
+### Download
 
-**The mod goes on the server as well as the client.** Both sides also need Create Fly, Fabric API, and REI.
+- [Modrinth](https://modrinth.com/project/vMOBLOfr)
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/create-fly-recipe-viewer/preview)
+- [GitHub releases](https://github.com/chaevsfe/CreateReiViewer-Fly/releases)
+
+**Required on server and client**
+| Component | Version |
+| --- | --- |
+| Minecraft | `26.2` |
+| Mod loader | Fabric Loader `0.19.3` or newer |
+| Create Fly | `6.0.9-1` or newer |
+| Fabric API | required |
+| REI | optional i guess |
+| Java | `25` or newer |
+| Environments | Client and server |
 
 ## JEI
 
 Installing JEI (or RRV) next to Create Fly can make every client fail to join
 
-Workaround: put the nested steps on the wire by name instead of by
-id. It changes the wire format, In `config/createreiviewer.json`:
+Workaround: Change the wire format, In `config/createreiviewer.json`:
 
 ```json
 {"fixSequencedAssemblySync": true}
 ```
-**Must be enabled on the server and client**
 
 ## Licence
 
-MIT — see `LICENSE`
+MIT
