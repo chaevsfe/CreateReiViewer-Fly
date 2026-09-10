@@ -19,6 +19,7 @@ import com.zurrtum.create.content.kinetics.press.PressingRecipe;
 import com.zurrtum.create.content.kinetics.saw.CuttingRecipe;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
+import dev.chaevsfe.createreiviewer.api.CreateReiApi;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDerived;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
@@ -48,6 +49,11 @@ import net.minecraft.world.item.crafting.StonecutterRecipe;
 import java.util.List;
 
 public class CreateReiCommonPlugin implements REICommonPlugin {
+    @Override
+    public double getPriority() {
+        return CreateReiApi.PLUGIN_PRIORITY;
+    }
+
     @Override
     public void registerDisplaySerializer(DisplaySerializerRegistry registry) {
         CreateReiSerializers.register("the plugin reload", registry);

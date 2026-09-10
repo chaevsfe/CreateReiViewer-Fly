@@ -2,6 +2,7 @@ package dev.chaevsfe.createreiviewer.client;
 
 import com.zurrtum.create.AllItems;
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
+import dev.chaevsfe.createreiviewer.api.CreateReiApi;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticBrewingCategory;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticPackingCategory;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticShapelessCategory;
@@ -33,13 +34,19 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 
 public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
+    public double getPriority() {
+        return CreateReiApi.PLUGIN_PRIORITY;
+    }
+
+    @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(
+            new SequencedAssemblyCategory(),
+            new PressingCategory(),
+            new MixingCategory(),
             new AutomaticPackingCategory(),
             new PackingCategory(),
-            new PressingCategory(),
             new AutomaticShapelessCategory(),
-            new MixingCategory(),
             new MillingCategory(),
             new SawingCategory(),
             new CrushingCategory(),
@@ -50,7 +57,6 @@ public class CreateReiClientPlugin implements REIClientPlugin {
             new MechanicalCraftingCategory(),
             new SpoutFillingCategory(),
             new SandpaperPolishingCategory(),
-            new SequencedAssemblyCategory(),
             new FanBlastingCategory(),
             new FanHauntingCategory(),
             new FanSmokingCategory(),

@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 public final class CreateReiApi {
     public static final String MOD_ID = CreateReiViewer.MOD_ID;
     public static final String REI_MOD_ID = "roughlyenoughitems";
+    public static final double PLUGIN_PRIORITY = -200.0D;
 
     private CreateReiApi() {
     }
