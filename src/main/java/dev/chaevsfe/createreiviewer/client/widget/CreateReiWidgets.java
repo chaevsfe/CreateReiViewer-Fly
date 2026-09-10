@@ -2,6 +2,8 @@ package dev.chaevsfe.createreiviewer.client.widget;
 
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
+import com.zurrtum.create.client.foundation.utility.CreateLang;
+import com.zurrtum.create.content.processing.recipe.HeatCondition;
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -19,6 +21,10 @@ import java.util.function.Function;
 
 public final class CreateReiWidgets {
     private CreateReiWidgets() {
+    }
+
+    public static Component heatLabel(HeatCondition heat) {
+        return CreateLang.translateDirect(heat.getTranslationKey());
     }
 
     public static Widget texture(AllGuiTextures texture, int x, int y) {

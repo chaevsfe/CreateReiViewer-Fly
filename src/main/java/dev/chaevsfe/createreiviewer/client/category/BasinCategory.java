@@ -7,7 +7,6 @@ import dev.chaevsfe.createreiviewer.client.widget.CreateReiWidgets;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
-import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -65,11 +64,11 @@ public abstract class BasinCategory extends CreateReiCategory<CreateReiDisplay> 
         if (heat == HeatCondition.NONE) {
             panel.texture(AllGuiTextures.JEI_NO_HEAT_BAR, 4, 80);
             panel.texture(AllGuiTextures.JEI_SHADOW, 81, 68);
-            return;
+        } else {
+            panel.texture(AllGuiTextures.JEI_HEAT_BAR, 4, 80);
+            panel.texture(AllGuiTextures.JEI_LIGHT, 81, 88);
+            panel.pip(91, 69, (pose, x, y) -> new BasinBlazeBurnerRenderState(pose, x, y, heat.visualizeAsBlazeBurner()));
         }
-        panel.texture(AllGuiTextures.JEI_HEAT_BAR, 4, 80);
-        panel.texture(AllGuiTextures.JEI_LIGHT, 81, 88);
-        panel.pip(91, 69, (pose, x, y) -> new BasinBlazeBurnerRenderState(pose, x, y, heat.visualizeAsBlazeBurner()));
-        panel.text(Component.translatable(heat.getTranslationKey()), 9, 86, heat.getColor());
+        panel.text(CreateReiWidgets.heatLabel(heat), 9, 86, heat.getColor());
     }
 }

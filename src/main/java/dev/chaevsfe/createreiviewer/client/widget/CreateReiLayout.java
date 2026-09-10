@@ -7,7 +7,6 @@ import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplays;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -69,7 +68,7 @@ public final class CreateReiLayout {
 
     public static void heatBar(Panel panel, HeatCondition heat, int x, int y) {
         panel.texture(heat == HeatCondition.NONE ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR, x, y);
-        panel.text(Component.translatable(heat.getTranslationKey()), x + 5, y + 6, heat.getColor());
+        panel.text(CreateReiWidgets.heatLabel(heat), x + 5, y + 6, heat.getColor());
     }
 
     public static void blazeBurner(Panel panel, HeatCondition heat, int x, int y) {
