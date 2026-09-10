@@ -104,8 +104,12 @@ public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
     public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage) {
         if (stage == ReloadStage.END) {
-            logCategoryOrder();
             ResyncClient.onReloadEnded();
+            try {
+                logCategoryOrder();
+            } catch (RuntimeException exception) {
+                CreateReiViewer.LOGGER.warn("Could not read the REI category order", exception);
+            }
         }
     }
 
