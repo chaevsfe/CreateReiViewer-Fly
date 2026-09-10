@@ -53,10 +53,11 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
             panel.junk(146 + shift, 91, display.outputs().get(1), display.chance(1));
         }
 
-        panel.texture(AllGuiTextures.JEI_LONG_ARROW, 47, 94);
+        panel.texture(AllGuiTextures.JEI_LONG_ARROW, shift + 47, 94);
         if (display.loops() > 1) {
-            panel.icon(AllIcons.I_SEQ_REPEAT, 60, 99);
-            panel.text(Component.translatable("create.recipe.assembly.repeat", display.loops()), 76, 104, LABEL_COLOR);
+            panel.icon(AllIcons.I_SEQ_REPEAT, shift + 60, 99);
+            panel.text(Component.literal("x" + display.loops()), shift + 76, 104, LABEL_COLOR);
+            panel.tooltip(43, 92, 65, 24, Component.translatable("create.recipe.assembly.repeat", display.loops()));
         }
 
         List<Identifier> types = display.stepTypes();

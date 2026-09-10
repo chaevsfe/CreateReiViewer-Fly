@@ -3,7 +3,9 @@ package dev.chaevsfe.createreiviewer.client.widget;
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.render.ManualBlockRenderState;
+import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
+import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -56,8 +58,12 @@ public final class Panel {
     public void text(Component text, int x, int y, int color) {
         int tx = ox + x;
         int ty = oy + y;
-        widgets.add(me.shedaniel.rei.api.client.gui.widgets.Widgets.createDrawableWidget(
+        widgets.add(Widgets.createDrawableWidget(
             (graphics, mouseX, mouseY, delta) -> graphics.text(Minecraft.getInstance().font, text, tx, ty, color, false)));
+    }
+
+    public void tooltip(int x, int y, int width, int height, Component text) {
+        widgets.add(Widgets.createTooltip(new Rectangle(ox + x, oy + y, width, height), text));
     }
 
     public void pip(int x, int y, PipFactory factory) {
