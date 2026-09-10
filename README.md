@@ -48,6 +48,6 @@ Workaround: Change the wire format, In `config/createreiviewer.json`:
 {"fixSequencedAssemblySync": true}
 ```
 
-## Licence
+## Support
 
-MIT
+Please report problems on the issue tracker. Include the mod version, and the client or server log.
