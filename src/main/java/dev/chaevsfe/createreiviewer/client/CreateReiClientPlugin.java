@@ -25,9 +25,12 @@ import dev.chaevsfe.createreiviewer.client.category.SandpaperPolishingCategory;
 import dev.chaevsfe.createreiviewer.client.category.SawingCategory;
 import dev.chaevsfe.createreiviewer.client.category.SequencedAssemblyCategory;
 import dev.chaevsfe.createreiviewer.client.category.SpoutFillingCategory;
+import dev.chaevsfe.createreiviewer.client.widget.FluidEntryRenderer;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
+import me.shedaniel.rei.api.client.entry.renderer.EntryRendererRegistry;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
+import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
@@ -38,6 +41,11 @@ public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
     public double getPriority() {
         return CreateReiApi.PLUGIN_PRIORITY;
+    }
+
+    @Override
+    public void registerEntryRenderers(EntryRendererRegistry registry) {
+        registry.register(VanillaEntryTypes.FLUID, FluidEntryRenderer.provider());
     }
 
     @Override
