@@ -32,6 +32,8 @@ import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 
+import java.util.StringJoiner;
+
 public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
     public double getPriority() {
@@ -102,7 +104,16 @@ public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
     public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage) {
         if (stage == ReloadStage.END) {
+            logCategoryOrder();
             ResyncClient.onReloadEnded();
         }
+    }
+
+    private static void logCategoryOrder() {
+        StringJoiner order = new StringJoiner(", ");
+        for (CategoryRegistry.CategoryConfiguration<?> configuration : CategoryRegistry.getInstance()) {
+            order.add(configuration.getCategoryIdentifier().getIdentifier().toString());
+        }
+        CreateReiViewer.LOGGER.info("Category order: {}", order);
     }
 }
