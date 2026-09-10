@@ -38,4 +38,4 @@ id. It changes the wire format, In `config/createreiviewer.json`:
 
 ## Licence
 
-MIT — see `LICENSE`. no Create Fly code, class or asset is copied or redistributed here. See `NOTICE`.
+MIT — see `LICENSE`
