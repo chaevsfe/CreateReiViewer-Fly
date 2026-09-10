@@ -3,6 +3,7 @@
   "id": "createreiviewer",
   "version": "${version}",
   "name": "Create Fly: Recipe Viewer",
+  "icon": "assets/createreiviewer/icon.png",
   "description": "Shows Create Fly's machine recipes in Roughly Enough Items on Fabric.",
   "authors": [
     "chaevsfe"
