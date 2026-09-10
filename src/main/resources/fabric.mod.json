@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "createreiviewer",
   "version": "${version}",
-  "name": "Create Fly: Recipe Viewer (Unofficial)",
+  "name": "Create Fly: Recipe Viewer",
   "description": "Shows Create Fly's machine recipes in Roughly Enough Items on Fabric.",
   "authors": [
     "chaevsfe"

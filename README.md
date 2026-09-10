@@ -1,4 +1,4 @@
-# Create Fly: Recipe Viewer (Unofficial)
+# Create Fly: Recipe Viewer
 
 Shows Create Fly's machine recipes in [Roughly Enough Items](https://modrinth.com/mod/rei)
 on Fabric, Minecraft 26.2.
