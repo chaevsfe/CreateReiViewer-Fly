@@ -39,22 +39,21 @@ public abstract class FanCategory extends CreateReiCategory<CreateReiDisplay> {
 
     @Override
     protected void build(CreateReiDisplay display, Panel panel) {
+        List<EntryIngredient> outputs = display.outputs();
+        int count = outputs.size();
+        int shift = 1 - Math.min(3, count);
+
         panel.texture(AllGuiTextures.JEI_SHADOW, 46, 27);
         panel.texture(glow, 65, 39);
         panel.texture(AllGuiTextures.JEI_LONG_ARROW, 54, 51);
         BlockState state = atmosphere.get();
         panel.pip(56, 4, (pose, x, y) -> new FanRenderState(pose, x, y, state));
 
-        List<EntryIngredient> outputs = display.outputs();
-        int count = outputs.size();
-        if (count <= 1) {
+        if (count == 1) {
             panel.slot(21, 48, display.inputs().get(0));
-            if (count == 1) {
-                panel.output(141, 48, outputs.get(0), display.chance(0));
-            }
+            panel.output(141, 48, outputs.get(0), display.chance(0));
             return;
         }
-        int shift = 1 + 3 - Math.min(3, count);
         panel.slot(21 + 5 * shift, 48, display.inputs().get(0));
         int xBase = 141 + 9 * shift;
         int yBase = count > 9 ? 57 : 48;
