@@ -56,10 +56,14 @@ public final class Panel {
     }
 
     public void text(Component text, int x, int y, int color) {
+        text(text, x, y, color, false);
+    }
+
+    public void text(Component text, int x, int y, int color, boolean shadow) {
         int tx = ox + x;
         int ty = oy + y;
         widgets.add(Widgets.createDrawableWidget(
-            (graphics, mouseX, mouseY, delta) -> graphics.text(Minecraft.getInstance().font, text, tx, ty, color, false)));
+            (graphics, mouseX, mouseY, delta) -> graphics.text(Minecraft.getInstance().font, text, tx, ty, color, shadow)));
     }
 
     public void tooltip(int x, int y, int width, int height, Component text) {

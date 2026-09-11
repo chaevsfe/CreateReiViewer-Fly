@@ -62,6 +62,6 @@ public class MechanicalCraftingCategory extends CreateReiCategory<CreateReiGridD
             }
         }
         panel.output(133, 80, display.outputs().get(0), 1.0f);
-        panel.text(Component.literal(String.valueOf(filled)), 142, 39, -1);
+        panel.text(Component.literal(String.valueOf(filled)), 142, 39, -1, true);
     }
 }
