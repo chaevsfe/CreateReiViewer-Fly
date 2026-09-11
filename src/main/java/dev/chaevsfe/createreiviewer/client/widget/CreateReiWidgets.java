@@ -20,6 +20,7 @@ import org.joml.Matrix3x2fStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class CreateReiWidgets {
     private CreateReiWidgets() {
@@ -54,14 +55,14 @@ public final class CreateReiWidgets {
         });
     }
 
-    public static Widget itemScaled(int x, int y, int size, ItemStack stack) {
+    public static Widget itemScaled(int x, int y, int size, Supplier<ItemStack> stack) {
         float scale = size / 16.0f;
         return Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
             Matrix3x2fStack pose = graphics.pose();
             pose.pushMatrix();
             pose.translate(x, y);
             pose.scale(scale, scale);
-            graphics.renderItem(stack, 0, 0);
+            graphics.renderItem(stack.get(), 0, 0);
             pose.popMatrix();
         });
     }

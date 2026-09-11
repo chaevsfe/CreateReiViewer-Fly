@@ -4,6 +4,7 @@ import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.render.ManualBlockRenderState;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class Panel {
     private final int ox;
@@ -37,13 +39,15 @@ public final class Panel {
         widgets.add(CreateReiWidgets.icon(icon, ox + x, oy + y));
     }
 
-    public void slot(int x, int y, EntryIngredient entries) {
+    public Slot slot(int x, int y, EntryIngredient entries) {
         texture(AllGuiTextures.JEI_SLOT, x - 1, y - 1);
-        widgets.add(CreateReiWidgets.inputSlot(ox + x, oy + y, entries));
+        return bareSlot(x, y, entries);
     }
 
-    public void bareSlot(int x, int y, EntryIngredient entries) {
-        widgets.add(CreateReiWidgets.inputSlot(ox + x, oy + y, entries));
+    public Slot bareSlot(int x, int y, EntryIngredient entries) {
+        Slot slot = CreateReiWidgets.inputSlot(ox + x, oy + y, entries);
+        widgets.add(slot);
+        return slot;
     }
 
     public void output(int x, int y, EntryIngredient entries, float chance) {
@@ -83,7 +87,7 @@ public final class Panel {
         widgets.add(CreateReiWidgets.pictureInPicture(pose -> new ManualBlockRenderState(pose, state, px, py)));
     }
 
-    public void itemPip(int x, int y, int size, ItemStack stack) {
+    public void itemPip(int x, int y, int size, Supplier<ItemStack> stack) {
         widgets.add(CreateReiWidgets.itemScaled(ox + x, oy + y, size, stack));
     }
 

@@ -8,6 +8,7 @@ import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
@@ -41,14 +42,16 @@ public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay>
     protected void build(CreateReiDisplay display, Panel panel) {
         panel.texture(AllGuiTextures.JEI_DOWN_ARROW, 79, 15);
 
-        ItemStack target = targetStack(display.inputs().get(1));
-        if (!target.isEmpty()) {
-            panel.texture(AllGuiTextures.JEI_SHADOW, 67, 52);
-            panel.itemPip(79, 34, TARGET_SIZE, target);
-        }
+        EntryIngredient target = display.inputs().get(1);
+        ItemStack fallback = targetStack(target);
 
         panel.slot(51, 5, DeployingCategory.held(display));
-        panel.slot(27, 38, display.inputs().get(1));
+        Slot targetSlot = panel.slot(27, 38, target);
+
+        if (!fallback.isEmpty()) {
+            panel.texture(AllGuiTextures.JEI_SHADOW, 67, 52);
+            panel.itemPip(79, 34, TARGET_SIZE, () -> currentStack(targetSlot, fallback));
+        }
 
         List<EntryIngredient> outputs = display.outputs();
         if (outputs.size() == 1) {
@@ -64,6 +67,14 @@ public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay>
                 display.chance(i)
             );
         }
+    }
+
+    private static ItemStack currentStack(Slot slot, ItemStack fallback) {
+        EntryStack<?> current = slot.getCurrentEntry();
+        if (current != null && current.getValue() instanceof ItemStack itemStack && !itemStack.isEmpty()) {
+            return itemStack;
+        }
+        return fallback;
     }
 
     private static ItemStack targetStack(EntryIngredient target) {
