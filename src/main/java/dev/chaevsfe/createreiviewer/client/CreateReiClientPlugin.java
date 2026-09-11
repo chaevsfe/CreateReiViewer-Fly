@@ -40,7 +40,7 @@ import java.util.StringJoiner;
 public class CreateReiClientPlugin implements REIClientPlugin {
     @Override
     public double getPriority() {
-        return CreateReiApi.PLUGIN_PRIORITY;
+        return CreateReiApi.VIEWER_PLUGIN_PRIORITY;
     }
 
     @Override

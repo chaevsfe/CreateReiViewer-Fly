@@ -24,6 +24,7 @@ public final class CreateReiApi {
     public static final String MOD_ID = CreateReiViewer.MOD_ID;
     public static final String REI_MOD_ID = "roughlyenoughitems";
     public static final double PLUGIN_PRIORITY = -200.0D;
+    public static final double VIEWER_PLUGIN_PRIORITY = PLUGIN_PRIORITY - 50.0D;
 
     private CreateReiApi() {
     }

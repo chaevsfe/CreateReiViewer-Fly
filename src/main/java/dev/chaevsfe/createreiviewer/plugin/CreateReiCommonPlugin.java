@@ -51,7 +51,7 @@ import java.util.List;
 public class CreateReiCommonPlugin implements REICommonPlugin {
     @Override
     public double getPriority() {
-        return CreateReiApi.PLUGIN_PRIORITY;
+        return CreateReiApi.VIEWER_PLUGIN_PRIORITY;
     }
 
     @Override
