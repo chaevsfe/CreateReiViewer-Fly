@@ -45,7 +45,7 @@ public abstract class FanCategory extends CreateReiCategory<CreateReiDisplay> {
 
         panel.texture(AllGuiTextures.JEI_SHADOW, 46, 27);
         panel.texture(glow, 65, 39);
-        panel.texture(AllGuiTextures.JEI_LONG_ARROW, 54, 51);
+        panel.texture(AllGuiTextures.JEI_LONG_ARROW, 54 + 7 * shift, 51);
         BlockState state = atmosphere.get();
         panel.pip(56, 4, (pose, x, y) -> new FanRenderState(pose, x, y, state));
 
