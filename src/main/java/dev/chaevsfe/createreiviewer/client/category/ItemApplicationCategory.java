@@ -2,7 +2,6 @@ package dev.chaevsfe.createreiviewer.client.category;
 
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
-import com.zurrtum.create.client.foundation.gui.render.ManualBlockRenderState;
 import dev.chaevsfe.createreiviewer.client.widget.CreateReiWidgets;
 import dev.chaevsfe.createreiviewer.client.widget.OneItemRenderer;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
@@ -12,13 +11,13 @@ import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
 public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay> {
+    private static final int TARGET_SIZE = 27;
+
     public ItemApplicationCategory() {
         super("create.recipe.item_application");
     }
@@ -40,12 +39,12 @@ public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay>
 
     @Override
     protected void build(CreateReiDisplay display, Panel panel) {
-        panel.texture(AllGuiTextures.JEI_SHADOW, 67, 52);
         panel.texture(AllGuiTextures.JEI_DOWN_ARROW, 79, 15);
 
-        BlockState target = targetBlock(display.inputs().get(1));
-        if (target != null) {
-            panel.pip(79, 34, (pose, x, y) -> new ManualBlockRenderState(pose, target, x, y));
+        ItemStack target = targetStack(display.inputs().get(1));
+        if (!target.isEmpty()) {
+            panel.texture(AllGuiTextures.JEI_SHADOW, 67, 52);
+            panel.itemPip(79, 34, TARGET_SIZE, target);
         }
 
         panel.slot(51, 5, DeployingCategory.held(display));
@@ -67,12 +66,12 @@ public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay>
         }
     }
 
-    private static BlockState targetBlock(EntryIngredient target) {
+    private static ItemStack targetStack(EntryIngredient target) {
         for (EntryStack<?> stack : target) {
-            if (stack.getValue() instanceof ItemStack itemStack && itemStack.getItem() instanceof BlockItem blockItem) {
-                return blockItem.getBlock().defaultBlockState();
+            if (stack.getValue() instanceof ItemStack itemStack && !itemStack.isEmpty()) {
+                return itemStack;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 }

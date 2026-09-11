@@ -13,7 +13,9 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,18 @@ public final class CreateReiWidgets {
             pose.scale(scale, scale);
             pose.translate(-x, -y);
             graphics.guiRenderState.addPicturesInPictureState(factory.create(new Matrix3x2f(pose), x, y));
+            pose.popMatrix();
+        });
+    }
+
+    public static Widget itemScaled(int x, int y, int size, ItemStack stack) {
+        float scale = size / 16.0f;
+        return Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
+            Matrix3x2fStack pose = graphics.pose();
+            pose.pushMatrix();
+            pose.translate(x, y);
+            pose.scale(scale, scale);
+            graphics.renderItem(stack, 0, 0);
             pose.popMatrix();
         });
     }

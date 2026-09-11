@@ -9,6 +9,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -80,6 +81,10 @@ public final class Panel {
         int px = ox + x;
         int py = oy + y;
         widgets.add(CreateReiWidgets.pictureInPicture(pose -> new ManualBlockRenderState(pose, state, px, py)));
+    }
+
+    public void itemPip(int x, int y, int size, ItemStack stack) {
+        widgets.add(CreateReiWidgets.itemScaled(ox + x, oy + y, size, stack));
     }
 
     public void pipScaled(int x, int y, float scale, PipFactory factory) {
