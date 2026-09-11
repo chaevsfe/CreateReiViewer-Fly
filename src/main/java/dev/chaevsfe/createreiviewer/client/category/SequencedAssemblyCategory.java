@@ -11,6 +11,7 @@ import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiSequenceDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -65,8 +66,11 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
         int startX = 94 - 14 * steps;
         for (int i = 0; i < steps; i++) {
             int x = startX + 28 * i;
-            panel.texture(AllGuiTextures.JEI_SLOT, x - 1, 14);
-            panel.bareSlot(x, 15, display.stepEntries().get(i));
+            EntryIngredient entries = display.stepEntries().get(i);
+            if (!entries.isEmpty()) {
+                panel.texture(AllGuiTextures.JEI_SLOT, x - 1, 14);
+                panel.bareSlot(x, 15, entries);
+            }
             String roman = ROMANS[Math.min(i, ROMANS.length - 1)];
             panel.text(Component.literal(roman), x + 8 - Minecraft.getInstance().font.width(roman) / 2, 2, LABEL_COLOR);
             step(panel, types.get(i), i, x);
