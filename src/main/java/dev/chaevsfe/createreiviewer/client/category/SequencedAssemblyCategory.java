@@ -5,6 +5,8 @@ import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.render.DeployerRenderState;
 import com.zurrtum.create.client.foundation.gui.render.PressRenderState;
+import com.zurrtum.create.client.foundation.gui.render.SpoutRenderState;
+import dev.architectury.fluid.FluidStack;
 import dev.chaevsfe.createreiviewer.client.widget.OneItemRenderer;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
@@ -17,12 +19,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequenceDisplay> {
     private static final String[] ROMANS = {"I", "II", "III", "IV", "V", "VI", "-"};
     private static final int LABEL_COLOR = -7829368;
     private static final float PRESS_SCALE = 0.6333333f;
     private static final float DEPLOYER_SCALE = 0.75641024f;
+    private static final float SPOUT_SCALE = 0.76086956f;
+    private static final int SPOUT_IDS = 12;
+
+    private final AtomicInteger spoutId = new AtomicInteger();
 
     public SequencedAssemblyCategory() {
         super("create.recipe.sequenced_assembly");
@@ -73,11 +80,11 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
             }
             String roman = ROMANS[Math.min(i, ROMANS.length - 1)];
             panel.text(Component.literal(roman), x + 8 - Minecraft.getInstance().font.width(roman) / 2, 2, LABEL_COLOR);
-            step(panel, types.get(i), i, x);
+            step(panel, types.get(i), i, x, entries);
         }
     }
 
-    private static void step(Panel panel, Identifier type, int index, int x) {
+    private void step(Panel panel, Identifier type, int index, int x, EntryIngredient entries) {
         String path = type.getPath();
         if (path.equals("pressing")) {
             panel.pipScaled(x, 15, PRESS_SCALE, (pose, px, py) -> new PressRenderState(index, pose, px - 3, py + 18, index));
@@ -85,6 +92,25 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
         }
         if (path.equals("deploying")) {
             panel.pipScaled(x, 15, DEPLOYER_SCALE, (pose, px, py) -> new DeployerRenderState(index, pose, px - 3, py + 18, index));
+            return;
         }
+        if (path.equals("filling")) {
+            FluidStack fluid = DrainingCategory.firstFluid(entries);
+            if (fluid == null) {
+                return;
+            }
+            int id = nextSpoutId();
+            panel.pipScaled(x, 15, SPOUT_SCALE,
+                (pose, px, py) -> new SpoutRenderState(id, pose, fluid.getFluid(), fluid.getPatch(), px - 2, py + 24, index));
+        }
+    }
+
+    private int nextSpoutId() {
+        int id = spoutId.getAndIncrement();
+        if (id >= SPOUT_IDS) {
+            spoutId.set(1);
+            return 0;
+        }
+        return id;
     }
 }
