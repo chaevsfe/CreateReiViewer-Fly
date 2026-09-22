@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Create Fly: Recipe Viewer",
   "icon": "assets/createreiviewer/icon.png",
-  "description": "Shows Create Fly's machine recipes in Roughly Enough Items on Fabric.",
+  "description": "Shows Create Fly's machine recipes in Roughly Enough Items, and Create add-on recipes in Roughly Enough Items and Just Enough Items, on Fabric.",
   "authors": [
     "chaevsfe"
   ],
@@ -30,6 +30,9 @@
     ],
     "rei_client": [
       "dev.chaevsfe.createreiviewer.client.CreateReiClientPlugin"
+    ],
+    "jei_mod_plugin": [
+      "dev.chaevsfe.createreiviewer.client.jei.ViewerJeiPlugin"
     ]
   },
   "mixins": [
@@ -49,7 +52,8 @@
     "java": ">=25"
   },
   "suggests": {
-    "roughlyenoughitems": "*"
+    "roughlyenoughitems": "*",
+    "jei": "*"
   },
   "breaks": {
     "roughlyenoughitems": "${rei_version_breaks}"

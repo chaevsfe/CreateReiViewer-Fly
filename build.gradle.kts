@@ -21,6 +21,9 @@ repositories {
     maven("https://api.modrinth.com/maven") {
         content { includeGroup("maven.modrinth") }
     }
+    maven("https://maven.blamejared.com/") {
+        content { includeGroup("mezz.jei") }
+    }
     maven("https://maven.shedaniel.me/") {
         content {
             includeGroup("me.shedaniel.cloth")
@@ -39,6 +42,7 @@ dependencies {
     implementation("me.shedaniel.cloth:basic-math:${property("basic_math_version")}")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    compileOnly("mezz.jei:jei-26.2-fabric:${property("jei_version")}")
 }
 
 java {

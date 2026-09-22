@@ -27,6 +27,7 @@ import dev.chaevsfe.createreiviewer.display.CreateReiDisplays;
 import dev.chaevsfe.createreiviewer.display.CreateReiGridDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiSequenceDisplay;
 import dev.chaevsfe.createreiviewer.display.CreateReiSerializers;
+import dev.chaevsfe.createreiviewer.display.ViewerReiDisplays;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
@@ -164,6 +165,7 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
             transfers.size() - derivedDraining
         );
         CreateReiViewer.LOGGER.info("Recipe fillers registered for {} categories", CreateReiCategories.ALL.size());
+        ViewerReiDisplays.register(registry);
     }
 
     private static boolean isAutomaticPacking(net.minecraft.world.item.crafting.RecipeHolder<CraftingRecipe> holder) {
@@ -205,6 +207,7 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
         }
         CreateReiViewer.LOGGER.info("Create display total: {} across {} categories, {} empty",
             total, CreateReiCategories.ALL.size(), empty);
+        ViewerReiDisplays.report(registry);
     }
 
     private static void reportWireRoundTrip(CategoryIdentifier<?> category, List<? extends Display> displays) {

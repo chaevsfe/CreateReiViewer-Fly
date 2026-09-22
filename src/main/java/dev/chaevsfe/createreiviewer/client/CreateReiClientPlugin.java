@@ -3,6 +3,8 @@ package dev.chaevsfe.createreiviewer.client;
 import com.zurrtum.create.AllItems;
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import dev.chaevsfe.createreiviewer.api.CreateReiApi;
+import dev.chaevsfe.createreiviewer.api.CreateReiClientReport;
+import dev.chaevsfe.createreiviewer.api.client.ViewerCategory;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticBrewingCategory;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticPackingCategory;
 import dev.chaevsfe.createreiviewer.client.category.AutomaticShapelessCategory;
@@ -25,16 +27,26 @@ import dev.chaevsfe.createreiviewer.client.category.SandpaperPolishingCategory;
 import dev.chaevsfe.createreiviewer.client.category.SawingCategory;
 import dev.chaevsfe.createreiviewer.client.category.SequencedAssemblyCategory;
 import dev.chaevsfe.createreiviewer.client.category.SpoutFillingCategory;
+import dev.chaevsfe.createreiviewer.client.category.ViewerReiCategory;
+import dev.chaevsfe.createreiviewer.client.registry.ViewerClientPlugins;
 import dev.chaevsfe.createreiviewer.client.widget.FluidEntryRenderer;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
+import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
+import dev.chaevsfe.createreiviewer.registry.ViewerPlugins;
 import me.shedaniel.rei.api.client.entry.renderer.EntryRendererRegistry;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
+import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class CreateReiClientPlugin implements REIClientPlugin {
@@ -107,6 +119,41 @@ public class CreateReiClientPlugin implements REIClientPlugin {
         }
 
         CreateReiViewer.LOGGER.info("Registered {} REI categories", CreateReiCategories.ALL.size());
+        registerAddonCategories(registry);
+    }
+
+    private static void registerAddonCategories(CategoryRegistry registry) {
+        int added = 0;
+        for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
+            ViewerCategory category = entry.category();
+            if (!category.reiCategory()) {
+                continue;
+            }
+            CategoryIdentifier<CreateReiDisplay> identifier = CategoryIdentifier.of(category.id());
+            try {
+                registry.add(new ViewerReiCategory(category));
+                List<EntryStack<?>> workstations = new ArrayList<>(category.workstations().size());
+                for (ItemStack stack : category.workstations()) {
+                    workstations.add(EntryStacks.of(stack));
+                }
+                if (!workstations.isEmpty()) {
+                    registry.addWorkstations(identifier, workstations.toArray(new EntryStack<?>[0]));
+                }
+                added++;
+            } catch (RuntimeException exception) {
+                CreateReiViewer.LOGGER.error("Could not register REI category {} from {}", category.id(), entry.owner(), exception);
+            }
+        }
+        ViewerPlugins.groups().forEach((owner, ids) -> {
+            List<CategoryIdentifier<? extends CreateReiDisplay>> identifiers = new ArrayList<>(ids.size());
+            for (var id : ids) {
+                identifiers.add(CategoryIdentifier.<CreateReiDisplay>of(id));
+            }
+            CreateReiClientReport.register(owner, identifiers);
+        });
+        if (added > 0) {
+            CreateReiViewer.LOGGER.info("Registered {} add-on REI categories", added);
+        }
     }
 
     @Override
