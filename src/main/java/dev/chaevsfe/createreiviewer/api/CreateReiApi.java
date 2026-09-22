@@ -29,11 +29,13 @@ public final class CreateReiApi {
     private CreateReiApi() {
     }
 
+    @Deprecated
     public static boolean isAvailable() {
         FabricLoader loader = FabricLoader.getInstance();
         return loader.isModLoaded(MOD_ID) && loader.isModLoaded(REI_MOD_ID);
     }
 
+    @Deprecated
     public static CategoryIdentifier<CreateReiDisplay> category(String namespace, String path) {
         return CategoryIdentifier.of(namespace, path);
     }
@@ -42,6 +44,7 @@ public final class CreateReiApi {
         return Identifier.fromNamespaceAndPath(category.getNamespace(), category.getPath());
     }
 
+    @Deprecated
     public static <T extends Recipe<?>> void fill(
         ServerDisplayRegistry registry,
         Class<T> recipeClass,
@@ -51,6 +54,7 @@ public final class CreateReiApi {
         registry.<T, CreateReiDisplay>beginRecipeFiller(recipeClass).filterType(type).fill(mapper);
     }
 
+    @Deprecated
     public static <T extends Recipe<?>> void fill(
         ServerDisplayRegistry registry,
         Class<T> recipeClass,
@@ -61,6 +65,7 @@ public final class CreateReiApi {
         registry.<T, CreateReiDisplay>beginRecipeFiller(recipeClass).filterType(type).filter(filter).fill(mapper);
     }
 
+    @Deprecated
     public static void report(
         PluginManager<REICommonPlugin> manager,
         ReloadStage stage,

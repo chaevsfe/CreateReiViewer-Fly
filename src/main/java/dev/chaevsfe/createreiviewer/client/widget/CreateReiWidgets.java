@@ -110,7 +110,7 @@ public final class CreateReiWidgets {
         return line == null ? entries : withTooltips(entries, List.of(line));
     }
 
-    private static EntryIngredient withTooltips(EntryIngredient entries, List<Component> lines) {
+    public static EntryIngredient withTooltips(EntryIngredient entries, List<Component> lines) {
         if (lines.isEmpty()) {
             return entries;
         }
