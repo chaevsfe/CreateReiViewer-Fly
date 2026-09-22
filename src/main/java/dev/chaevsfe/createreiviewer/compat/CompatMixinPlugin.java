@@ -12,6 +12,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class CompatMixinPlugin implements IMixinConfigPlugin {
     private static final Map<String, String> REQUIRED_MOD = Map.of(
+        "ItemDescriptionRenderThreadMixin", "roughlyenoughitems",
         "JeiVanillaRecipeTagsMixin", "jei",
         "RrvStackSensitiveMixin", "rrv",
         "ArchitecturyFluidPatchMixin", "architectury"
