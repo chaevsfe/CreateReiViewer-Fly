@@ -1,7 +1,5 @@
 package dev.chaevsfe.createreiviewer.compat.jei;
 
-import dev.chaevsfe.createreiviewer.CreateReiViewer;
-import dev.chaevsfe.createreiviewer.config.ViewerConfig;
 import dev.chaevsfe.createreiviewer.mixin.RecipeSerializerAccessor;
 
 import com.zurrtum.create.AllRecipeSerializers;
@@ -63,9 +61,5 @@ public final class SequencedAssemblySyncFix {
             SequencedAssemblyRecipe::new
         );
         ((RecipeSerializerAccessor) (Object) AllRecipeSerializers.SEQUENCED_ASSEMBLY).createreiviewer$setStreamCodec(codec);
-        CreateReiViewer.LOGGER.info(
-            "Sequenced assembly sync fix active: nested sub recipes go on the wire by name, so this side no longer depends on recipe serializer raw ids. The server and every client must have {} set to true.",
-            ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC
-        );
     }
 }

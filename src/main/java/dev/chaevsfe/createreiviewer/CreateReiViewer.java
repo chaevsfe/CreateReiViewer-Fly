@@ -26,7 +26,16 @@ public class CreateReiViewer implements ModInitializer {
             ResyncPayloads.register();
             ResyncServer.register();
         }
-        if (ViewerConfig.fixSequencedAssemblySync()) {
+        boolean syncFix = ViewerConfig.fixSequencedAssemblySync();
+        LOGGER.info(
+            "{} is {} in {}{}: nested Create sequenced assembly recipes go on the wire by {}, so the server and every client must use the same value",
+            ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC,
+            syncFix,
+            ViewerConfig.path(),
+            ViewerConfig.raisedOldSyncDefault() ? " (raised from the old default false)" : "",
+            syncFix ? "serializer name" : "raw serializer id"
+        );
+        if (syncFix) {
             SequencedAssemblySyncFix.apply();
         } else if (recipeViewerNeedingTheFix() != null) {
             LOGGER.warn(
