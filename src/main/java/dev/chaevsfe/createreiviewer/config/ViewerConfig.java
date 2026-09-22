@@ -17,10 +17,12 @@ public final class ViewerConfig {
     public static final String FILE_NAME = CreateReiViewer.MOD_ID + ".json";
     public static final String FIX_SEQUENCED_ASSEMBLY_SYNC = "fixSequencedAssemblySync";
     public static final String RESYNC_AFTER_RELOAD = "resyncAfterReload";
+    public static final String FIX_JEI_VANILLA_RECIPE_TAGS = "fixJeiVanillaRecipeTags";
 
     private static boolean loaded;
     private static boolean fixSequencedAssemblySync;
     private static boolean resyncAfterReload = true;
+    private static boolean fixJeiVanillaRecipeTags = true;
 
     private ViewerConfig() {
     }
@@ -39,6 +41,13 @@ public final class ViewerConfig {
         return resyncAfterReload;
     }
 
+    public static synchronized boolean fixJeiVanillaRecipeTags() {
+        if (!loaded) {
+            load();
+        }
+        return fixJeiVanillaRecipeTags;
+    }
+
     public static Path path() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
     }
@@ -47,6 +56,7 @@ public final class ViewerConfig {
         loaded = true;
         fixSequencedAssemblySync = false;
         resyncAfterReload = true;
+        fixJeiVanillaRecipeTags = true;
         Path file = path();
         if (!Files.isRegularFile(file)) {
             write(file);
@@ -72,6 +82,12 @@ public final class ViewerConfig {
             } else {
                 resyncAfterReload = resync.getAsBoolean();
             }
+            JsonElement jeiTags = object.get(FIX_JEI_VANILLA_RECIPE_TAGS);
+            if (jeiTags == null) {
+                complete = false;
+            } else {
+                fixJeiVanillaRecipeTags = jeiTags.getAsBoolean();
+            }
             if (!complete) {
                 write(file);
             }
@@ -84,6 +100,7 @@ public final class ViewerConfig {
         JsonObject object = new JsonObject();
         object.addProperty(FIX_SEQUENCED_ASSEMBLY_SYNC, fixSequencedAssemblySync);
         object.addProperty(RESYNC_AFTER_RELOAD, resyncAfterReload);
+        object.addProperty(FIX_JEI_VANILLA_RECIPE_TAGS, fixJeiVanillaRecipeTags);
         try {
             Files.createDirectories(file.getParent());
             try (Writer writer = Files.newBufferedWriter(file)) {
