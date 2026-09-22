@@ -11,8 +11,9 @@ package dev.chaevsfe.createreiviewer.api.client;
  * <p>Each {@link ViewerCategory} carries a {@link ViewerLayout} written once against {@link ViewerCanvas}. The viewer
  * draws it as a REI category and as a JEI category; {@link ViewerLayouts} holds Create's usual pieces (basin, heat
  * bar, blaze burner, output grid). Coordinates are those of Create's own JEI pages: a 177 pixel wide content area whose
- * top is {@code overhangTop} pixels below the page top. An add-on that keeps its own REI category class for an id sets
- * {@link ViewerCategory.Builder#reiCategory(boolean)} to {@code false}, or REI rejects the duplicate.
+ * top is {@code overhangTop} pixels below the page top. An add-on that keeps its own REI category class or its own JEI
+ * plugin category for an id sets {@link ViewerCategory.Builder#reiCategory(boolean)} or
+ * {@link ViewerCategory.Builder#jeiCategory(boolean)} to {@code false}, or that viewer rejects the duplicate.
  *
  * <pre>{@code
  * public final class DieselViewerClientPlugin implements CreateViewerClientPlugin {

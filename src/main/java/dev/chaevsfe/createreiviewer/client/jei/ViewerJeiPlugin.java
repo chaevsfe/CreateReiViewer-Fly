@@ -39,8 +39,10 @@ public class ViewerJeiPlugin implements IModPlugin {
     private synchronized Map<Identifier, IRecipeType<ViewerRecipe>> types() {
         if (types.isEmpty()) {
             for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
-                Identifier id = entry.category().id();
-                types.put(id, IRecipeType.create(id, ViewerRecipe.class));
+                if (entry.category().jeiCategory()) {
+                    Identifier id = entry.category().id();
+                    types.put(id, IRecipeType.create(id, ViewerRecipe.class));
+                }
             }
         }
         return types;
@@ -51,6 +53,9 @@ public class ViewerJeiPlugin implements IModPlugin {
         int added = 0;
         for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
             ViewerCategory category = entry.category();
+            if (!category.jeiCategory()) {
+                continue;
+            }
             try {
                 registration.addRecipeCategories(new ViewerJeiCategory(category, types().get(category.id())));
                 added++;
@@ -65,7 +70,7 @@ public class ViewerJeiPlugin implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
             ViewerCategory category = entry.category();
-            if (!category.workstations().isEmpty()) {
+            if (category.jeiCategory() && !category.workstations().isEmpty()) {
                 registration.addCraftingStation(types().get(category.id()), category.workstations().toArray(ItemStack[]::new));
             }
         }
@@ -76,9 +81,17 @@ public class ViewerJeiPlugin implements IModPlugin {
         RecipeMap recipes = Internal.getClientSyncedRecipes();
         Map<Identifier, List<ViewerRecipe>> byCategory = new LinkedHashMap<>();
         Set<Identifier> undrawn = new LinkedHashSet<>();
+        Set<Identifier> optedOut = new LinkedHashSet<>();
+        for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
+            if (!entry.category().jeiCategory()) {
+                optedOut.add(entry.category().id());
+            }
+        }
         for (ViewerMapping<?> mapping : ViewerPlugins.mappings()) {
             if (!types().containsKey(mapping.category())) {
-                undrawn.add(mapping.category());
+                if (!optedOut.contains(mapping.category())) {
+                    undrawn.add(mapping.category());
+                }
                 continue;
             }
             List<ViewerRecipe> list = byCategory.computeIfAbsent(mapping.category(), id -> new ArrayList<>());

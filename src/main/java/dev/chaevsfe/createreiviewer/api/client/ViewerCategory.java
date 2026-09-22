@@ -21,6 +21,7 @@ public final class ViewerCategory {
     private final List<ItemStack> workstations;
     private final ViewerLayout layout;
     private final boolean reiCategory;
+    private final boolean jeiCategory;
 
     private ViewerCategory(Builder builder) {
         this.id = builder.id;
@@ -32,6 +33,7 @@ public final class ViewerCategory {
         this.workstations = List.copyOf(builder.workstations);
         this.layout = Objects.requireNonNull(builder.layout, "layout");
         this.reiCategory = builder.reiCategory;
+        this.jeiCategory = builder.jeiCategory;
         if (icon.isEmpty()) {
             throw new IllegalStateException("Category " + id + " has no icon");
         }
@@ -80,6 +82,10 @@ public final class ViewerCategory {
         return reiCategory;
     }
 
+    public boolean jeiCategory() {
+        return jeiCategory;
+    }
+
     public static final class Builder {
         private final Identifier id;
         private Component title;
@@ -90,6 +96,7 @@ public final class ViewerCategory {
         private final List<ItemStack> workstations = new ArrayList<>();
         private ViewerLayout layout;
         private boolean reiCategory = true;
+        private boolean jeiCategory = true;
 
         private Builder(Identifier id) {
             this.id = Objects.requireNonNull(id, "id");
@@ -161,6 +168,11 @@ public final class ViewerCategory {
 
         public Builder reiCategory(boolean reiCategory) {
             this.reiCategory = reiCategory;
+            return this;
+        }
+
+        public Builder jeiCategory(boolean jeiCategory) {
+            this.jeiCategory = jeiCategory;
             return this;
         }
 
