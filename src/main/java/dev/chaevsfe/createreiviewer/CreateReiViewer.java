@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 public class CreateReiViewer implements ModInitializer {
     public static final String MOD_ID = "createreiviewer";
     public static final Logger LOGGER = LoggerFactory.getLogger("Create Fly Recipe Viewer");
+    public static final String REI_MOD_ID = "roughlyenoughitems";
 
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
@@ -21,8 +22,10 @@ public class CreateReiViewer implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Create Fly Recipe Viewer loaded");
-        ResyncPayloads.register();
-        ResyncServer.register();
+        if (reiLoaded()) {
+            ResyncPayloads.register();
+            ResyncServer.register();
+        }
         if (ViewerConfig.fixSequencedAssemblySync()) {
             SequencedAssemblySyncFix.apply();
         } else if (recipeViewerNeedingTheFix() != null) {
@@ -35,6 +38,10 @@ public class CreateReiViewer implements ModInitializer {
                 recipeViewerNeedingTheFix()
             );
         }
+    }
+
+    public static boolean reiLoaded() {
+        return FabricLoader.getInstance().isModLoaded(REI_MOD_ID);
     }
 
     private static String recipeViewerNeedingTheFix() {

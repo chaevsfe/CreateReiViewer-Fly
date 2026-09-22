@@ -23,7 +23,7 @@
       "dev.chaevsfe.createreiviewer.CreateReiViewer"
     ],
     "client": [
-      "dev.chaevsfe.createreiviewer.client.CreateReiViewerClient"
+      "dev.chaevsfe.createreiviewer.client.ViewerClient"
     ],
     "rei_common": [
       "dev.chaevsfe.createreiviewer.plugin.CreateReiCommonPlugin"
@@ -46,8 +46,12 @@
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "${fabric_api_version_range}",
     "create": "${create_fabric_version_range}",
-    "roughlyenoughitems": "${rei_version_range}",
-    "architectury": "${architectury_version_range}",
     "java": ">=25"
+  },
+  "suggests": {
+    "roughlyenoughitems": "*"
+  },
+  "breaks": {
+    "roughlyenoughitems": "${rei_version_breaks}"
   }
 }
