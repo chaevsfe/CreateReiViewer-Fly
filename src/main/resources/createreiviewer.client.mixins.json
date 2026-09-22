@@ -3,7 +3,7 @@
   "package": "dev.chaevsfe.createreiviewer.client.mixin",
   "compatibilityLevel": "JAVA_25",
   "minVersion": "0.8.3",
-  "plugin": "dev.chaevsfe.createreiviewer.client.compat.RrvMixinPlugin",
+  "plugin": "dev.chaevsfe.createreiviewer.compat.CompatMixinPlugin",
   "client": [
     "RrvStackSensitiveMixin"
   ],

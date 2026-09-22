@@ -1,6 +1,7 @@
-package dev.chaevsfe.createreiviewer.client.compat;
+package dev.chaevsfe.createreiviewer.compat;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.asm.tree.ClassNode;
@@ -9,8 +10,11 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import net.fabricmc.loader.api.FabricLoader;
 
-public class RrvMixinPlugin implements IMixinConfigPlugin {
-    private static final boolean RRV_LOADED = FabricLoader.getInstance().isModLoaded("rrv");
+public class CompatMixinPlugin implements IMixinConfigPlugin {
+    private static final Map<String, String> REQUIRED_MOD = Map.of(
+        "RrvStackSensitiveMixin", "rrv",
+        "ArchitecturyFluidPatchMixin", "architectury"
+    );
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -23,7 +27,9 @@ public class RrvMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return RRV_LOADED;
+        String simpleName = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
+        String modId = REQUIRED_MOD.get(simpleName);
+        return modId == null || FabricLoader.getInstance().isModLoaded(modId);
     }
 
     @Override

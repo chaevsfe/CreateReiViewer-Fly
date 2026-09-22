@@ -64,8 +64,7 @@ tasks.processResources {
         "fabric_loader_version" to project.property("fabric_loader_version") as String,
         "fabric_api_version_range" to project.property("fabric_api_version_range") as String,
         "create_fabric_version_range" to project.property("create_fabric_version_range") as String,
-        "rei_version_range" to project.property("rei_version_range") as String,
-        "architectury_version_range" to project.property("architectury_version_range") as String,
+        "rei_version_breaks" to project.property("rei_version_breaks") as String,
     )
     expansions.forEach { (key, value) -> inputs.property(key, value) }
     filesMatching("fabric.mod.json") { expand(expansions) }
