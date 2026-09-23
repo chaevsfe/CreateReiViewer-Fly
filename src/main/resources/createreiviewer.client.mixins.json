@@ -7,7 +7,29 @@
   "client": [
     "ItemDescriptionRenderThreadMixin",
     "JeiVanillaRecipeTagsMixin",
-    "RrvStackSensitiveMixin"
+    "RrvStackSensitiveMixin",
+    "darkgui.AbstractFilterScreenMixin",
+    "darkgui.AbstractSimiContainerScreenMixin",
+    "darkgui.AssemblyScreenMixin",
+    "darkgui.ClipboardScreenMixin",
+    "darkgui.ComputerScreenMixin",
+    "darkgui.ElevatorContactScreenMixin",
+    "darkgui.FactoryPanelScreenMixin",
+    "darkgui.FactoryPanelSetItemScreenMixin",
+    "darkgui.FilterScreenMixin",
+    "darkgui.PackageFilterScreenMixin",
+    "darkgui.PackagePortScreenMixin",
+    "darkgui.RedstoneRequesterScreenMixin",
+    "darkgui.SchematicExtractBackgroundMixin",
+    "darkgui.SchematicRenderWindowMixin",
+    "darkgui.StationScreenMixin",
+    "darkgui.StockKeeperCategoryScreenMixin",
+    "darkgui.StockKeeperRequestScreenMixin",
+    "darkgui.TitleExtractBackgroundMixin",
+    "darkgui.TitleRenderWindowMixin",
+    "darkgui.TrainHUDMixin",
+    "darkgui.WorldshaperScreenMixin",
+    "darkgui.ZapperScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
