@@ -71,7 +71,7 @@ public final class Panel {
             (graphics, mouseX, mouseY, delta) -> graphics.text(Minecraft.getInstance().font, text, tx, ty, color, shadow)));
     }
 
-    public void tooltip(int x, int y, int width, int height, Component text) {
+    public void tooltip(int x, int y, int width, int height, Component... text) {
         widgets.add(Widgets.createTooltip(new Rectangle(ox + x, oy + y, width, height), text));
     }
 

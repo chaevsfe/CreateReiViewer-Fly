@@ -5,6 +5,7 @@ import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.render.DeployerRenderState;
 import com.zurrtum.create.client.foundation.gui.render.PressRenderState;
+import com.zurrtum.create.client.foundation.gui.render.SawRenderState;
 import com.zurrtum.create.client.foundation.gui.render.SpoutRenderState;
 import dev.architectury.fluid.FluidStack;
 import dev.chaevsfe.createreiviewer.client.widget.OneItemRenderer;
@@ -14,6 +15,7 @@ import dev.chaevsfe.createreiviewer.display.CreateReiSequenceDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -27,6 +29,7 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
     private static final float PRESS_SCALE = 0.6333333f;
     private static final float DEPLOYER_SCALE = 0.75641024f;
     private static final float SPOUT_SCALE = 0.76086956f;
+    private static final float SAW_SCALE = 0.57575756f;
     private static final int SPOUT_IDS = 12;
 
     private final AtomicInteger spoutId = new AtomicInteger();
@@ -81,7 +84,20 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
             String roman = ROMANS[Math.min(i, ROMANS.length - 1)];
             panel.text(Component.literal(roman), x + 8 - Minecraft.getInstance().font.width(roman) / 2, 2, LABEL_COLOR);
             step(panel, types.get(i), i, x, entries);
+            if (entries.isEmpty()) {
+                panel.tooltip(x - 5, 0, 26, 86,
+                    Component.translatable("create.recipe.assembly.step", i + 1),
+                    stepName(types.get(i)).copy().withStyle(ChatFormatting.DARK_GREEN));
+            }
         }
+    }
+
+    private static Component stepName(Identifier type) {
+        return switch (type.getPath()) {
+            case "pressing" -> Component.translatable("create.recipe.assembly.pressing");
+            case "cutting" -> Component.translatable("create.recipe.assembly.cutting");
+            default -> Component.literal(type.toString());
+        };
     }
 
     private void step(Panel panel, Identifier type, int index, int x, EntryIngredient entries) {
@@ -92,6 +108,10 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
         }
         if (path.equals("deploying")) {
             panel.pipScaled(x, 15, DEPLOYER_SCALE, (pose, px, py) -> new DeployerRenderState(index, pose, px - 3, py + 18, index));
+            return;
+        }
+        if (path.equals("cutting")) {
+            panel.pipScaled(x, 15, SAW_SCALE, (pose, px, py) -> new SawRenderState(pose, px - 3, py + 90));
             return;
         }
         if (path.equals("filling")) {
