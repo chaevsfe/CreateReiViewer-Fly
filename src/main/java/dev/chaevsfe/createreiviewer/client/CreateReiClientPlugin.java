@@ -43,6 +43,7 @@ import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -120,6 +121,38 @@ public class CreateReiClientPlugin implements REIClientPlugin {
 
         CreateReiViewer.LOGGER.info("Registered {} REI categories", CreateReiCategories.ALL.size());
         registerAddonCategories(registry);
+        registerExtraWorkstations(registry);
+    }
+
+    private static void registerExtraWorkstations(CategoryRegistry registry) {
+        for (ViewerClientPlugins.Workstations extra : ViewerClientPlugins.workstations()) {
+            CategoryIdentifier<?> identifier = reiCategory(extra.category());
+            if (registry.tryGet(identifier).isEmpty()) {
+                CreateReiViewer.LOGGER.warn("{} added workstations to {}, which REI does not know", extra.owner(), extra.category());
+                continue;
+            }
+            List<EntryStack<?>> stacks = new ArrayList<>(extra.stacks().size());
+            for (ItemStack stack : extra.stacks()) {
+                stacks.add(EntryStacks.of(stack));
+            }
+            try {
+                registry.addWorkstations(identifier, stacks.toArray(new EntryStack<?>[0]));
+                CreateReiViewer.LOGGER.info("{} added {} workstations to REI category {}", extra.owner(), stacks.size(), identifier);
+            } catch (RuntimeException exception) {
+                CreateReiViewer.LOGGER.error("Could not add {}'s workstations to REI category {}", extra.owner(), identifier, exception);
+            }
+        }
+    }
+
+    private static CategoryIdentifier<?> reiCategory(Identifier category) {
+        if (category.getNamespace().equals("create")) {
+            for (CategoryIdentifier<?> create : CreateReiCategories.ALL) {
+                if (create.getPath().equals(category.getPath())) {
+                    return create;
+                }
+            }
+        }
+        return CategoryIdentifier.of(category);
     }
 
     private static void registerAddonCategories(CategoryRegistry registry) {

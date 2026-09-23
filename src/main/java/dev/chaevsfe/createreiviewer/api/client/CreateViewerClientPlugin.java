@@ -15,6 +15,9 @@ package dev.chaevsfe.createreiviewer.api.client;
  * plugin category for an id sets {@link ViewerCategory.Builder#reiCategory(boolean)} or
  * {@link ViewerCategory.Builder#jeiCategory(boolean)} to {@code false}, or that viewer rejects the duplicate.
  *
+ * <p>{@link ViewerCategoryRegistry#addWorkstations} adds the add-on's machines or tools to a category it does not own,
+ * such as one of Create's ({@link CreateViewerCategories}), in REI and JEI alike.
+ *
  * <pre>{@code
  * public final class DieselViewerClientPlugin implements CreateViewerClientPlugin {
  *     @Override
