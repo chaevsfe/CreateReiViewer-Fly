@@ -48,8 +48,11 @@ import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CreateReiCommonPlugin implements REICommonPlugin {
+    private static final Pattern SEQUENCE_STEP = Pattern.compile("sequenced_assembly_\\d+_.+_\\d+");
+
     @Override
     public double getPriority() {
         return CreateReiApi.VIEWER_PLUGIN_PRIORITY;
@@ -66,34 +69,44 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
 
         registry.<MixingRecipe, CreateReiDisplay>beginRecipeFiller(MixingRecipe.class)
             .filterType(AllRecipeTypes.MIXING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::mixing);
         registry.<CompactingRecipe, CreateReiDisplay>beginRecipeFiller(CompactingRecipe.class)
             .filterType(AllRecipeTypes.COMPACTING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::packing);
         registry.<PotionRecipe, CreateReiDisplay>beginRecipeFiller(PotionRecipe.class)
             .filterType(AllRecipeTypes.POTION)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::potion);
         registry.<PressingRecipe, CreateReiDisplay>beginRecipeFiller(PressingRecipe.class)
             .filterType(AllRecipeTypes.PRESSING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::pressing);
         registry.<MillingRecipe, CreateReiDisplay>beginRecipeFiller(MillingRecipe.class)
             .filterType(AllRecipeTypes.MILLING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::milling);
         registry.<CuttingRecipe, CreateReiDisplay>beginRecipeFiller(CuttingRecipe.class)
             .filterType(AllRecipeTypes.CUTTING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::sawing);
         registry.<CrushingRecipe, CreateReiDisplay>beginRecipeFiller(CrushingRecipe.class)
             .filterType(AllRecipeTypes.CRUSHING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::crushing);
         registry.<MillingRecipe, CreateReiDisplay>beginRecipeFiller(MillingRecipe.class)
             .filterType(AllRecipeTypes.MILLING)
+            .filter(CreateReiCommonPlugin::standalone)
             .filter(holder -> !derived.millingIsAlsoCrushing(holder))
             .fill(CreateReiDisplays::crushing);
         registry.<SplashingRecipe, CreateReiDisplay>beginRecipeFiller(SplashingRecipe.class)
             .filterType(AllRecipeTypes.SPLASHING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::fanWashing);
         registry.<HauntingRecipe, CreateReiDisplay>beginRecipeFiller(HauntingRecipe.class)
             .filterType(AllRecipeTypes.HAUNTING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::fanHaunting);
         registry.<SmokingRecipe, CreateReiDisplay>beginRecipeFiller(SmokingRecipe.class)
             .filterType(RecipeType.SMOKING)
@@ -109,27 +122,35 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
             .fill(CreateReiDisplays::fanBlasting);
         registry.<SandPaperPolishingRecipe, CreateReiDisplay>beginRecipeFiller(SandPaperPolishingRecipe.class)
             .filterType(AllRecipeTypes.SANDPAPER_POLISHING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::sandpaperPolishing);
         registry.<SandPaperPolishingRecipe, CreateReiDisplay>beginRecipeFiller(SandPaperPolishingRecipe.class)
             .filterType(AllRecipeTypes.SANDPAPER_POLISHING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(derived::deployerFromSandpaper);
         registry.<ManualApplicationRecipe, CreateReiDisplay>beginRecipeFiller(ManualApplicationRecipe.class)
             .filterType(AllRecipeTypes.ITEM_APPLICATION)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::itemApplication);
         registry.<ManualApplicationRecipe, CreateReiDisplay>beginRecipeFiller(ManualApplicationRecipe.class)
             .filterType(AllRecipeTypes.ITEM_APPLICATION)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::deploying);
         registry.<DeployerApplicationRecipe, CreateReiDisplay>beginRecipeFiller(DeployerApplicationRecipe.class)
             .filterType(AllRecipeTypes.DEPLOYING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::deploying);
         registry.<EmptyingRecipe, CreateReiDisplay>beginRecipeFiller(EmptyingRecipe.class)
             .filterType(AllRecipeTypes.EMPTYING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::draining);
         registry.<FillingRecipe, CreateReiDisplay>beginRecipeFiller(FillingRecipe.class)
             .filterType(AllRecipeTypes.FILLING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::spoutFilling);
         registry.<MechanicalCraftingRecipe, CreateReiGridDisplay>beginRecipeFiller(MechanicalCraftingRecipe.class)
             .filterType(AllRecipeTypes.MECHANICAL_CRAFTING)
+            .filter(CreateReiCommonPlugin::standalone)
             .fill(CreateReiDisplays::mechanicalCrafting);
         registry.<SequencedAssemblyRecipe, CreateReiSequenceDisplay>beginRecipeFiller(SequencedAssemblyRecipe.class)
             .filterType(AllRecipeTypes.SEQUENCED_ASSEMBLY)
@@ -166,6 +187,11 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
         );
         CreateReiViewer.LOGGER.info("Recipe fillers registered for {} categories", CreateReiCategories.ALL.size());
         ViewerReiDisplays.register(registry);
+    }
+
+    private static boolean standalone(net.minecraft.world.item.crafting.RecipeHolder<?> holder) {
+        net.minecraft.resources.Identifier id = holder.id().identifier();
+        return !id.getNamespace().equals("create") || !SEQUENCE_STEP.matcher(id.getPath()).matches();
     }
 
     private static boolean isAutomaticPacking(net.minecraft.world.item.crafting.RecipeHolder<CraftingRecipe> holder) {
