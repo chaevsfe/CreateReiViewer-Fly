@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 public class ViewerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        PipRenderers.register();
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> ViewerPlugins.load());
         if (CreateReiViewer.reiLoaded()) {
             new CreateReiViewerClient().onInitializeClient();
