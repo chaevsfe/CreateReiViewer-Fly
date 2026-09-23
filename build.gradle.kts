@@ -42,7 +42,7 @@ dependencies {
     implementation("me.shedaniel.cloth:basic-math:${property("basic_math_version")}")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-    compileOnly("mezz.jei:jei-26.2-fabric:${property("jei_version")}")
+    compileOnly("mezz.jei:jei-26.1.2-fabric:${property("jei_version")}")
 }
 
 java {

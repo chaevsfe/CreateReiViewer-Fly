@@ -31,7 +31,11 @@ public class CompatMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         String simpleName = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
         String modId = REQUIRED_MOD.get(simpleName);
-        return modId == null || FabricLoader.getInstance().isModLoaded(modId);
+        if (modId == null) {
+            return true;
+        }
+        return FabricLoader.getInstance().isModLoaded(modId)
+            && CompatMixinPlugin.class.getClassLoader().getResource(targetClassName.replace('.', '/') + ".class") != null;
     }
 
     @Override

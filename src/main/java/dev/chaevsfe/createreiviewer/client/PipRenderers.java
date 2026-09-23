@@ -9,7 +9,7 @@ public final class PipRenderers {
     }
 
     public static void register() {
-        PictureInPictureRendererRegistry.register(context -> new BasinBlazeBurnerRenderer());
-        PictureInPictureRendererRegistry.register(context -> new SandPaperRenderer());
+        PictureInPictureRendererRegistry.register(context -> new BasinBlazeBurnerRenderer(context.bufferSource()));
+        PictureInPictureRendererRegistry.register(context -> new SandPaperRenderer(context.bufferSource()));
     }
 }

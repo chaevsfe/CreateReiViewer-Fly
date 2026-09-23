@@ -134,7 +134,7 @@ public class ViewerJeiPlugin implements IModPlugin {
             CreateReiViewer.LOGGER.info("JEI: {} recipes for category {}", entry.getValue().size(), entry.getKey());
         }
         CreateReiViewer.LOGGER.info("JEI: {} add-on recipes across {} categories from {} synced recipes (synced with server: {})",
-            total, byCategory.size(), recipes.values().size(), Internal.hasClientSyncedRecipes());
+            total, byCategory.size(), recipes.values().size(), recipes != RecipeMap.EMPTY);
         if (!undrawn.isEmpty()) {
             CreateReiViewer.LOGGER.warn("JEI: no client layout for categories {}; their recipes are not shown", undrawn);
         }

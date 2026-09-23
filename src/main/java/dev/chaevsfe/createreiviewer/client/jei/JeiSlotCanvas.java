@@ -10,8 +10,11 @@ import dev.chaevsfe.createreiviewer.client.widget.PipFactory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -60,12 +63,13 @@ final class JeiSlotCanvas implements ViewerCanvas {
 
     static void fill(IRecipeSlotBuilder slot, ViewerIngredient ingredient) {
         if (ingredient instanceof ViewerIngredient.OfIngredient of) {
-            if (of.count() <= 1) {
+            ClientLevel level = Minecraft.getInstance().level;
+            if (of.count() <= 1 || level == null) {
                 slot.add(of.ingredient());
                 return;
             }
             List<ItemStack> stacks = new ArrayList<>();
-            for (ItemStack stack : of.ingredient().display().resolveForStacks(slot.getContextMap())) {
+            for (ItemStack stack : of.ingredient().display().resolveForStacks(SlotDisplayContext.fromLevel(level))) {
                 stacks.add(stack.copyWithCount(stack.getCount() * of.count()));
             }
             slot.addItemStacks(stacks);
