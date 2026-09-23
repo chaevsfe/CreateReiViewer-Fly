@@ -19,11 +19,14 @@ public final class DarkGuiRecolour {
 
     private final Map<Integer, Integer> cache = new HashMap<>();
 
-    public NativeImage recolour(NativeImage image, int rows) {
+    public NativeImage recolour(NativeImage image, DarkGuiKeep keep) {
         boolean changed = false;
-        int height = Math.min(rows, image.getHeight());
+        int height = Math.min(keep.rows(), image.getHeight());
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < image.getWidth(); x++) {
+                if (!keep.recolours(x, y)) {
+                    continue;
+                }
                 int argb = image.getPixel(x, y);
                 int alpha = argb >>> 24;
                 if (alpha == 0) {
