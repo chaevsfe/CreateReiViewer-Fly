@@ -48,8 +48,9 @@ It is off by default, and switching it on or off needs no restart.
 
 The pack ships no Create art. It is built on your machine, when resources load, from the
 textures inside your own copy of Create Fly, and the dark titles and labels those screens draw
-in code are lightened while it is on. A resource pack you rank above it that replaces a Create
-GUI texture keeps that texture. REI and JEI keep their own themes.
+in code are lightened while it is on; titles on Create's gold header bars stay dark. A resource
+pack you rank above it that replaces a Create GUI texture keeps that texture. REI and JEI keep
+their own themes; only the slots and arrows of Create's recipe categories inside them turn dark.
 
 ## JEI
 Required on both server and client.
