@@ -35,7 +35,7 @@ public class ItemApplicationCategory extends CreateReiCategory<CreateReiDisplay>
 
     @Override
     protected int contentHeight() {
-        return 60;
+        return 63;
     }
 
     @Override
