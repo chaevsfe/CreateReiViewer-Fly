@@ -68,7 +68,7 @@ public final class CreateReiLayout {
 
     public static void heatBar(Panel panel, HeatCondition heat, int x, int y) {
         panel.texture(heat == HeatCondition.NONE ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR, x, y);
-        panel.text(CreateReiWidgets.heatLabel(heat), x + 5, y + 6, heat.getColor());
+        panel.text(CreateReiWidgets.heatLabel(heat), x + 5, y + 6, heat.getColor(), true);
     }
 
     public static void blazeBurner(Panel panel, HeatCondition heat, int x, int y) {

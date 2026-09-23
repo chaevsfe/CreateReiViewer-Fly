@@ -81,7 +81,7 @@ public final class ViewerLayouts {
 
     public static void heatBar(ViewerCanvas canvas, HeatCondition heat, int x, int y) {
         canvas.texture(heat == HeatCondition.NONE ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR, x, y);
-        canvas.text(heatLabel(heat), x + 5, y + 6, heat.getColor());
+        canvas.text(heatLabel(heat), x + 5, y + 6, heat.getColor(), true);
     }
 
     public static void blazeBurner(ViewerCanvas canvas, HeatCondition heat, int x, int y) {
@@ -140,7 +140,7 @@ public final class ViewerLayouts {
             canvas.texture(AllGuiTextures.JEI_LIGHT, 81, 88);
             canvas.pip(91, 69, (pose, x, y) -> new BasinBlazeBurnerRenderState(pose, x, y, heat.visualizeAsBlazeBurner()));
         }
-        canvas.text(heatLabel(heat), 9, 86, heat.getColor());
+        canvas.text(heatLabel(heat), 9, 86, heat.getColor(), true);
     }
 
     public static int basinInputX(int index, int count) {
