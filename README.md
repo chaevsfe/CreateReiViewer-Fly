@@ -38,6 +38,19 @@ Add-ons can also register categories of their own.
 | Java | `25` or newer |
 | Environments | Client and server |
 
+## Dark GUI
+
+An optional dark look for Create's own screens: filters, toolboxes, schedules, stock keepers,
+factory gauges, schematics and the rest.
+
+Turn it on in Options > Resource Packs: move "Create Fly: Dark GUI" from Available to Selected.
+It is off by default, and switching it on or off needs no restart.
+
+The pack ships no Create art. It is built on your machine, when resources load, from the
+textures inside your own copy of Create Fly, and the dark titles and labels those screens draw
+in code are lightened while it is on. A resource pack you rank above it that replaces a Create
+GUI texture keeps that texture. REI and JEI keep their own themes.
+
 ## JEI
 Required on both server and client.
 
