@@ -1,12 +1,12 @@
 # Create Fly: Recipe Viewer
 
-Shows Create Fly's machine recipes in [Roughly Enough Items](https://modrinth.com/mod/rei)
+Shows Create Fly's machine recipes in [Roughly Enough Items](https://modrinth.com/mod/rei) and [Just Enough Items](https://www.curseforge.com/minecraft/mc-mods/jei)
 on Fabric, Minecraft 26.2.
 
-Create Fly recipe-viewer support for REI: mixing, crushing, pressing, milling and sequenced-assembly
-recipe is is visible now in REI.
+Create Fly recipe-viewer support: mixing, crushing, pressing, milling and sequenced-assembly
+recipe is is visible now in REI/JEI.
 
-It is not affiliated with ZurrTum, the Create team, or the REI authors.
+It is not affiliated with ZurrTum, the Create team, or the REI and JEI authors.
 
 ## What it covers
 
@@ -34,19 +34,12 @@ Add-ons can also register categories of their own.
 | Mod loader | Fabric Loader `0.19.3` or newer |
 | Create Fly | `6.0.9-1` or newer |
 | Fabric API | required |
-| REI | optional i guess |
+| REI/JEI | optional i guess |
 | Java | `25` or newer |
 | Environments | Client and server |
 
 ## JEI
-
-Installing JEI (or RRV) next to Create Fly can make every client fail to join
-
-Workaround: Change the wire format, In `config/createreiviewer.json`:
-
-```json
-{"fixSequencedAssemblySync": true}
-```
+Required on both server and client.
 
 ## Support
 
