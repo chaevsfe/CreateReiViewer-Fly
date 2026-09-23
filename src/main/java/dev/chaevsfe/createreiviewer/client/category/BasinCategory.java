@@ -69,6 +69,6 @@ public abstract class BasinCategory extends CreateReiCategory<CreateReiDisplay> 
             panel.texture(AllGuiTextures.JEI_LIGHT, 81, 88);
             panel.pip(91, 69, (pose, x, y) -> new BasinBlazeBurnerRenderState(pose, x, y, heat.visualizeAsBlazeBurner()));
         }
-        panel.text(CreateReiWidgets.heatLabel(heat), 9, 86, heat.getColor());
+        panel.text(CreateReiWidgets.heatLabel(heat), 9, 86, heat.getColor(), true);
     }
 }
