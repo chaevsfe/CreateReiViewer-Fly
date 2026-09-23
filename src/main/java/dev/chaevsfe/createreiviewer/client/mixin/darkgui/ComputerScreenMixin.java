@@ -10,11 +10,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ComputerScreen.class)
 public abstract class ComputerScreenMixin {
-    @ModifyConstant(method = "renderWindow(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V", constant = @Constant(intValue = 0xFF442000))
-    private int createreiviewer$darkTitle(int original) {
-        return DarkGui.text(original, DarkGui.CREAM);
-    }
-
     @ModifyConstant(method = "renderWindow(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V", constant = @Constant(intValue = 0xFF7A7A7A))
     private int createreiviewer$darkHint(int original) {
         return DarkGui.text(original, DarkGui.PALE_GREY);
