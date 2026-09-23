@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class ViewerJeiPlugin implements IModPlugin {
@@ -79,6 +80,19 @@ public class ViewerJeiPlugin implements IModPlugin {
             ViewerCategory category = entry.category();
             if (category.jeiCategory() && !category.workstations().isEmpty()) {
                 registration.addCraftingStation(types().get(category.id()), category.workstations().toArray(ItemStack[]::new));
+            }
+        }
+        for (ViewerClientPlugins.Workstations extra : ViewerClientPlugins.workstations()) {
+            Optional<IRecipeType<?>> type = registration.getJeiHelpers().getRecipeType(extra.category());
+            if (type.isEmpty()) {
+                CreateReiViewer.LOGGER.warn("{} added workstations to {}, which JEI does not know", extra.owner(), extra.category());
+                continue;
+            }
+            try {
+                registration.addCraftingStation(type.get(), extra.stacks().toArray(ItemStack[]::new));
+                CreateReiViewer.LOGGER.info("{} added {} workstations to JEI recipe type {}", extra.owner(), extra.stacks().size(), extra.category());
+            } catch (RuntimeException exception) {
+                CreateReiViewer.LOGGER.error("Could not add {}'s workstations to JEI recipe type {}", extra.owner(), extra.category(), exception);
             }
         }
     }
