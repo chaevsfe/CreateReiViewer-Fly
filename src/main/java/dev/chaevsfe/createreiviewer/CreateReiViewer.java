@@ -4,6 +4,7 @@ import dev.chaevsfe.createreiviewer.compat.jei.SequencedAssemblySyncFix;
 import dev.chaevsfe.createreiviewer.config.ViewerConfig;
 import dev.chaevsfe.createreiviewer.net.ResyncPayloads;
 import dev.chaevsfe.createreiviewer.net.ResyncServer;
+import dev.chaevsfe.createreiviewer.net.SerializerIdsServer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
@@ -26,25 +27,27 @@ public class CreateReiViewer implements ModInitializer {
             ResyncPayloads.register();
             ResyncServer.register();
         }
+        SerializerIdsServer.register();
         boolean syncFix = ViewerConfig.fixSequencedAssemblySync();
         LOGGER.info(
-            "{} is {} in {}{}: nested Create sequenced assembly recipes go on the wire by {}, so the server and every client must use the same value",
+            "{} is {} in {}{}: {}",
             ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC,
             syncFix,
             ViewerConfig.path(),
             ViewerConfig.raisedOldSyncDefault() ? " (raised from the old default false)" : "",
-            syncFix ? "serializer name" : "raw serializer id"
+            syncFix
+                ? "Create sequenced assembly steps are decoded with the server's recipe serializer ids whenever the server sends them; recipes stay in Create Fly's wire format, so the server and the clients need not use the same value"
+                : "Create sequenced assembly steps are decoded with this side's own recipe serializer ids, as in Create Fly"
         );
         if (syncFix) {
             SequencedAssemblySyncFix.apply();
         } else if (recipeViewerNeedingTheFix() != null) {
             LOGGER.warn(
-                "{} is installed and {} is false in {}: a client joining this server disconnects while decoding Create sequenced assembly recipes, because Create Fly writes a recipe serializer raw id on the wire and that id differs between the two sides. Set {} to true in that file on the server AND on every client, or remove {}.",
+                "{} is installed and {} is false in {}: this client disconnects while decoding Create sequenced assembly recipes from a server that numbers its recipe serializers differently. Set {} to true in that file to decode them with the server's ids.",
                 recipeViewerNeedingTheFix(),
                 ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC,
                 ViewerConfig.path(),
-                ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC,
-                recipeViewerNeedingTheFix()
+                ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC
             );
         }
     }
