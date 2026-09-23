@@ -91,8 +91,8 @@ public final class CreateReiDerived {
         DeployerApplicationRecipe synthetic = new DeployerApplicationRecipe(
             List.of(new ProcessingOutput(result.item(), result.count(), result.components(), 1.0f)),
             true,
-            sandpaper(),
-            recipe.ingredient()
+            recipe.ingredient(),
+            sandpaper()
         );
         ResourceKey<Recipe<?>> id = ResourceKey.create(
             Registries.RECIPE,
