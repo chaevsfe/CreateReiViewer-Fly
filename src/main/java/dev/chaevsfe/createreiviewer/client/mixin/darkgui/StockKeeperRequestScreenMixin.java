@@ -25,11 +25,6 @@ public abstract class StockKeeperRequestScreenMixin {
         return DarkGui.text(original, DarkGui.CREAM);
     }
 
-    @ModifyConstant(method = "extractBackground(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V", constant = @Constant(intValue = 0x4A2D31))
-    private int createreiviewer$darkFadingTitle(int original) {
-        return DarkGui.text(original, DarkGui.CREAM_RGB);
-    }
-
     @ModifyConstant(method = "extractBackground(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V", constant = @Constant(intValue = 0x8C5D4B))
     private int createreiviewer$darkBannerText(int original) {
         return DarkGui.text(original, DarkGui.CREAM_RGB);
