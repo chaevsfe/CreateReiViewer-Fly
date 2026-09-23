@@ -45,12 +45,7 @@ public class SpoutFillingCategory extends CreateReiCategory<CreateReiDisplay> {
 
         FluidStack fluid = DrainingCategory.firstFluid(display.inputs().get(1));
         if (fluid != null) {
-            int id = spoutId.getAndIncrement();
-            if (id >= SPOUT_VARIANTS) {
-                spoutId.set(0);
-                id = 0;
-            }
-            int variant = id;
+            int variant = spoutId.getAndUpdate(id -> (id + 1) % SPOUT_VARIANTS);
             panel.pip(75, 1, (pose, x, y) -> new SpoutRenderState(variant, pose, fluid.getFluid(), fluid.getPatch(), x, y, 0));
         }
         panel.slot(27, 51, display.inputs().get(0));
