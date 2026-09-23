@@ -8,7 +8,6 @@
     "ItemDescriptionRenderThreadMixin",
     "JeiVanillaRecipeTagsMixin",
     "RrvStackSensitiveMixin",
-    "darkgui.AbstractFilterScreenMixin",
     "darkgui.AbstractSimiContainerScreenMixin",
     "darkgui.AssemblyScreenMixin",
     "darkgui.ClipboardScreenMixin",
@@ -25,11 +24,8 @@
     "darkgui.StationScreenMixin",
     "darkgui.StockKeeperCategoryScreenMixin",
     "darkgui.StockKeeperRequestScreenMixin",
-    "darkgui.TitleExtractBackgroundMixin",
-    "darkgui.TitleRenderWindowMixin",
     "darkgui.TrainHUDMixin",
-    "darkgui.WorldshaperScreenMixin",
-    "darkgui.ZapperScreenMixin"
+    "darkgui.WorldshaperScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
