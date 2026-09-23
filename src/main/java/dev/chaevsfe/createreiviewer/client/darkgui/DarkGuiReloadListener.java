@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -42,10 +41,6 @@ final class DarkGuiReloadListener extends SimpleReloadListener<DarkGuiReloadList
         "logo.png",
         "icons.png",
         "trainmap_sprite_sheet.png"
-    );
-    private static final Map<String, Integer> SPRITE_ROWS = Map.of(
-        "schedule.png", 226,
-        "schedule_2.png", 238
     );
 
     private Set<Identifier> registered = Set.of();
@@ -113,7 +108,7 @@ final class DarkGuiReloadListener extends SimpleReloadListener<DarkGuiReloadList
             NativeImage image = null;
             try (InputStream in = Files.newInputStream(file.path())) {
                 image = NativeImage.read(in);
-                if (recolour.recolour(image, SPRITE_ROWS.getOrDefault(relative, Integer.MAX_VALUE)) == null) {
+                if (recolour.recolour(image, DarkGuiKeep.forTexture(relative)) == null) {
                     image.close();
                     unchanged++;
                     continue;
