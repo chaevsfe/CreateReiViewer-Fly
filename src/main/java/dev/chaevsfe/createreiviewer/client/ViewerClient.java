@@ -1,6 +1,7 @@
 package dev.chaevsfe.createreiviewer.client;
 
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
+import dev.chaevsfe.createreiviewer.client.darkgui.DarkGui;
 import dev.chaevsfe.createreiviewer.config.ViewerConfig;
 import dev.chaevsfe.createreiviewer.registry.ViewerPlugins;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,6 +11,7 @@ public class ViewerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         PipRenderers.register();
+        DarkGui.register();
         if (ViewerConfig.fixSequencedAssemblySync()) {
             SerializerIdsClient.register();
         }
