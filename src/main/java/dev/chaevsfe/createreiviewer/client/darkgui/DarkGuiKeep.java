@@ -21,7 +21,6 @@ public record DarkGuiKeep(int rows, List<Rect> rects) {
         JEI_ARROW("jei/widgets.png", 19, 10, 42, 10),
         JEI_LONG_ARROW("jei/widgets.png", 19, 0, 71, 10),
         JEI_DOWN_ARROW("jei/widgets.png", 0, 21, 18, 14),
-        JEI_LIGHT("jei/widgets.png", 0, 42, 52, 11),
         JEI_HEAT_BAR("jei/widgets.png", 0, 201, 169, 19),
         JEI_NO_HEAT_BAR("jei/widgets.png", 0, 221, 169, 19);
 
