@@ -50,6 +50,13 @@ public class ViewerJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        try {
+            if (CuttingStepRenderer.registerIfMissing()) {
+                CreateReiViewer.LOGGER.info("Registered a JEI sequenced assembly renderer for cutting steps");
+            }
+        } catch (RuntimeException | LinkageError exception) {
+            CreateReiViewer.LOGGER.warn("Could not register a JEI sequenced assembly renderer for cutting steps", exception);
+        }
         int added = 0;
         for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
             ViewerCategory category = entry.category();
