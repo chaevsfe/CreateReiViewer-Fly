@@ -5,7 +5,7 @@ plugins {
 }
 
 group = property("maven_group") as String
-version = "${property("mod_version")}+fabric-mc${property("minecraft_version")}"
+version = "${property("mod_version")}+fly-mc${property("mc_line")}"
 
 base {
     archivesName.set(property("archives_base_name") as String)
@@ -64,6 +64,7 @@ tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     val expansions = mapOf(
         "version" to project.version.toString(),
+        "mc_line" to project.property("mc_line") as String,
         "minecraft_dependency_version" to project.property("minecraft_dependency_version") as String,
         "fabric_loader_version" to project.property("fabric_loader_version") as String,
         "fabric_api_version_range" to project.property("fabric_api_version_range") as String,
