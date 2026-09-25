@@ -4,12 +4,12 @@
   "version": "${version}",
   "name": "Create Fly: Recipe Viewer",
   "icon": "assets/createreiviewer/icon.png",
-  "description": "Shows Create Fly's machine recipes in Roughly Enough Items, and Create add-on recipes in Roughly Enough Items and Just Enough Items, on Fabric.",
+  "description": "Shows Create Fly machine recipes and Create add-on recipes in Roughly Enough Items and Just Enough Items.",
   "authors": [
     "chaevsfe"
   ],
   "contact": {
-    "homepage": "https://github.com/chaevsfe/CreateReiViewer-Fly",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/create-fly-recipe-viewer",
     "sources": "https://github.com/chaevsfe/CreateReiViewer-Fly",
     "issues": "https://github.com/chaevsfe/CreateReiViewer-Fly/issues",
     "upstream": "https://modrinth.com/mod/create-fly"
