@@ -8,8 +8,11 @@ import com.zurrtum.create.client.foundation.gui.render.PressRenderState;
 import com.zurrtum.create.client.foundation.gui.render.SawRenderState;
 import com.zurrtum.create.client.foundation.gui.render.SpoutRenderState;
 import dev.architectury.fluid.FluidStack;
+import dev.chaevsfe.createreiviewer.CreateReiViewer;
+import dev.chaevsfe.createreiviewer.client.registry.ViewerClientPlugins;
 import dev.chaevsfe.createreiviewer.client.widget.OneItemRenderer;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
+import dev.chaevsfe.createreiviewer.client.widget.ReiCanvas;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
 import dev.chaevsfe.createreiviewer.display.CreateReiSequenceDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -23,6 +26,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -114,7 +118,7 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
     }
 
     private void step(Panel panel, Identifier type, int index, int x, EntryIngredient entries) {
-        String path = type.getPath();
+        String path = CREATE.equals(type.getNamespace()) ? type.getPath() : "";
         if (path.equals("pressing")) {
             panel.pipScaled(x, 15, PRESS_SCALE, (pose, px, py) -> new PressRenderState(index, pose, px - 3, py + 18, index));
             return;
@@ -135,6 +139,16 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
             int id = nextSpoutId();
             panel.pipScaled(x, 15, SPOUT_SCALE,
                 (pose, px, py) -> new SpoutRenderState(id, pose, fluid.getFluid(), fluid.getPatch(), px - 2, py + 24, index));
+            return;
+        }
+        ViewerClientPlugins.AssemblyStep step = ViewerClientPlugins.assemblySteps().get(type);
+        if (step == null) {
+            return;
+        }
+        try {
+            step.drawing().draw(new ReiCanvas(panel, Map.of()), index, x, 15);
+        } catch (RuntimeException | LinkageError exception) {
+            CreateReiViewer.LOGGER.warn("{} could not draw sequenced assembly step {}", step.owner(), type, exception);
         }
     }
 

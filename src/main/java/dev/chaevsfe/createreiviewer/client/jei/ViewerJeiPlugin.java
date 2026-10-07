@@ -58,6 +58,14 @@ public class ViewerJeiPlugin implements IModPlugin {
         } catch (RuntimeException | LinkageError exception) {
             CreateReiViewer.LOGGER.warn("Could not register a JEI sequenced assembly renderer for cutting steps", exception);
         }
+        try {
+            int steps = AssemblyStepRenderer.registerMissing();
+            if (steps > 0) {
+                CreateReiViewer.LOGGER.info("Registered {} JEI sequenced assembly renderers for add-on steps", steps);
+            }
+        } catch (RuntimeException | LinkageError exception) {
+            CreateReiViewer.LOGGER.warn("Could not register JEI sequenced assembly renderers for add-on steps", exception);
+        }
         int added = 0;
         for (ViewerClientPlugins.Entry entry : ViewerClientPlugins.entries()) {
             ViewerCategory category = entry.category();
