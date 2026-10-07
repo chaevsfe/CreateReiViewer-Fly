@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
 /**
- * Where a {@link CreateViewerClientPlugin} registers its categories and extra workstations.
+ * Where a {@link CreateViewerClientPlugin} registers its categories, extra workstations and sequenced assembly steps.
  */
 public interface ViewerCategoryRegistry {
     /**
@@ -37,5 +37,35 @@ public interface ViewerCategoryRegistry {
             stacks[i] = new ItemStack(items[i]);
         }
         addWorkstations(category, stacks);
+    }
+
+    /**
+     * Draws the sequenced assembly steps of {@code stepType}, a recipe type id, in Create's Recipe Sequence category, in
+     * REI and JEI alike.
+     *
+     * <p>The step's name is the one the add-on registers for that type with Create Fly's {@code AllAssemblyRecipeNames};
+     * without a drawing the step shows only its name. Create's own pressing, deploying, cutting and filling steps keep
+     * their machines, and a type drawn twice keeps the first drawing.
+     *
+     * <pre>{@code
+     * registry.addAssemblyStep(Identifier.fromNamespaceAndPath("createaddition", "charging"), CABlocks.TESLA_COIL);
+     * }</pre>
+     */
+    void addAssemblyStep(Identifier stepType, ViewerAssemblyStep drawing);
+
+    /**
+     * Same as {@link #addAssemblyStep(Identifier, ViewerAssemblyStep)}, drawing {@code icon} 24 pixels wide where Create
+     * draws its machines.
+     */
+    default void addAssemblyStep(Identifier stepType, ItemStack icon) {
+        ItemStack copy = icon.copy();
+        addAssemblyStep(stepType, (canvas, index, x, y) -> canvas.itemPip(x - 4, y + 27, 24, () -> copy));
+    }
+
+    /**
+     * Same as {@link #addAssemblyStep(Identifier, ItemStack)}, one stack of {@code icon}.
+     */
+    default void addAssemblyStep(Identifier stepType, ItemLike icon) {
+        addAssemblyStep(stepType, new ItemStack(icon));
     }
 }
