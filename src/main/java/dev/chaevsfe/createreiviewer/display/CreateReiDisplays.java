@@ -1,5 +1,8 @@
 package dev.chaevsfe.createreiviewer.display;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import com.zurrtum.create.AllAssemblyRecipeNames;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.content.fluids.transfer.EmptyingRecipe;
 import com.zurrtum.create.content.fluids.transfer.FillingRecipe;
@@ -17,11 +20,16 @@ import com.zurrtum.create.content.processing.recipe.ProcessingOutput;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.zurrtum.create.foundation.recipe.CreateSingleStackRollableRecipe;
 import com.zurrtum.create.infrastructure.fluids.FluidStack;
+import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -183,10 +191,13 @@ public final class CreateReiDisplays {
 
         List<Identifier> stepTypes = new ArrayList<>(steps);
         List<EntryIngredient> stepEntries = new ArrayList<>(steps);
+        List<Component> stepNames = new ArrayList<>(steps);
+        RegistryOps<JsonElement> ops = assemblyOps();
         for (int i = 0; i < steps; i++) {
             Recipe<?> step = sequence.get(i);
             stepTypes.add(typeIdOf(step));
             stepEntries.add(stepEntry(step));
+            stepNames.add(assemblyName(step, ops));
         }
 
         List<EntryIngredient> outputs = new ArrayList<>(2);
@@ -205,7 +216,8 @@ public final class CreateReiDisplays {
             stepTypes,
             stepEntries,
             loops,
-            locationOf(holder)
+            locationOf(holder),
+            stepNames
         );
     }
 
@@ -341,6 +353,29 @@ public final class CreateReiDisplays {
             return CreateReiEntries.fluid(filling.fluidIngredient());
         }
         return EntryIngredient.empty();
+    }
+
+    private static RegistryOps<JsonElement> assemblyOps() {
+        try {
+            return BasicDisplay.registryAccess().createSerializationContext(JsonOps.INSTANCE);
+        } catch (RuntimeException exception) {
+            CreateReiViewer.LOGGER.debug("No registry access to name sequenced assembly steps with", exception);
+            return null;
+        }
+    }
+
+    private static Component assemblyName(Recipe<?> step, RegistryOps<JsonElement> ops) {
+        if (ops == null) {
+            return CommonComponents.EMPTY;
+        }
+        try {
+            return Recipe.CODEC.encodeStart(ops, step).result()
+                .map(json -> AllAssemblyRecipeNames.get(ops, json))
+                .orElse(CommonComponents.EMPTY);
+        } catch (RuntimeException exception) {
+            CreateReiViewer.LOGGER.debug("Could not name a sequenced assembly step of type {}", typeIdOf(step), exception);
+            return CommonComponents.EMPTY;
+        }
     }
 
     private static Identifier typeIdOf(Recipe<?> recipe) {

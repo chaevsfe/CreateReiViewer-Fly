@@ -17,10 +17,13 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequenceDisplay> {
@@ -31,6 +34,7 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
     private static final float SPOUT_SCALE = 0.76086956f;
     private static final float SAW_SCALE = 0.57575756f;
     private static final int SPOUT_IDS = 12;
+    private static final String CREATE = "create";
 
     private final AtomicInteger spoutId = new AtomicInteger();
 
@@ -87,17 +91,26 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
             if (entries.isEmpty()) {
                 panel.tooltip(x - 5, 0, 26, 86,
                     Component.translatable("create.recipe.assembly.step", i + 1),
-                    stepName(types.get(i)).copy().withStyle(ChatFormatting.DARK_GREEN));
+                    stepName(types.get(i), display.stepName(i)).copy().withStyle(ChatFormatting.DARK_GREEN));
             }
         }
     }
 
-    private static Component stepName(Identifier type) {
-        return switch (type.getPath()) {
-            case "pressing" -> Component.translatable("create.recipe.assembly.pressing");
-            case "cutting" -> Component.translatable("create.recipe.assembly.cutting");
-            default -> Component.literal(type.toString());
-        };
+    private static Component stepName(Identifier type, Optional<Component> named) {
+        if (named.isPresent() && translated(named.get())) {
+            return named.get();
+        }
+        String key = "create.recipe.assembly." + (CREATE.equals(type.getNamespace()) ? type.getPath() : type.getNamespace() + "." + type.getPath());
+        if (Language.getInstance().has(key)) {
+            return Component.translatable(key);
+        }
+        return Component.literal(type.toString());
+    }
+
+    private static boolean translated(Component name) {
+        return !(name.getContents() instanceof TranslatableContents translatable)
+            || translatable.getFallback() != null
+            || Language.getInstance().has(translatable.getKey());
     }
 
     private void step(Panel panel, Identifier type, int index, int x, EntryIngredient entries) {

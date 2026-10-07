@@ -8,6 +8,9 @@ import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
@@ -24,12 +27,15 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         Identifier.CODEC.listOf().fieldOf("step_types").forGetter(display -> display.stepTypes),
         EntryIngredient.codec().listOf().fieldOf("step_entries").forGetter(display -> display.stepEntries),
         Codec.INT.fieldOf("loops").forGetter(CreateReiDisplay::flags),
-        Identifier.CODEC.optionalFieldOf("location").forGetter(CreateReiDisplay::getDisplayLocation)
+        Identifier.CODEC.optionalFieldOf("location").forGetter(CreateReiDisplay::getDisplayLocation),
+        ComponentSerialization.CODEC.listOf().lenientOptionalFieldOf("step_names", List.of()).forGetter(display -> display.stepNames)
     ).apply(instance, CreateReiSequenceDisplay::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CreateReiSequenceDisplay> STREAM_CODEC = new StreamCodec<>() {
         private final StreamCodec<RegistryFriendlyByteBuf, List<EntryIngredient>> ingredients =
             EntryIngredient.streamCodec().apply(ByteBufCodecs.list());
+        private final StreamCodec<RegistryFriendlyByteBuf, List<Component>> names =
+            ComponentSerialization.STREAM_CODEC.apply(ByteBufCodecs.list());
 
         @Override
         public CreateReiSequenceDisplay decode(RegistryFriendlyByteBuf buf) {
@@ -47,6 +53,15 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             }
             List<EntryIngredient> stepEntries = ingredients.decode(buf);
             int loops = buf.readVarInt();
+            Optional<Identifier> location = buf.readOptional(Identifier.STREAM_CODEC);
+            List<Component> stepNames = List.of();
+            if (buf.isReadable()) {
+                try {
+                    stepNames = names.decode(buf);
+                } catch (RuntimeException exception) {
+                    CreateReiViewer.LOGGER.debug("Could not read the step names of sequenced assembly display {}", location.orElse(null), exception);
+                }
+            }
             return new CreateReiSequenceDisplay(
                 inputs,
                 outputs,
@@ -54,7 +69,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
                 stepTypes,
                 stepEntries,
                 loops,
-                buf.readOptional(Identifier.STREAM_CODEC)
+                location,
+                stepNames
             );
         }
 
@@ -73,6 +89,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             ingredients.encode(buf, display.stepEntries);
             buf.writeVarInt(display.flags());
             buf.writeOptional(display.getDisplayLocation(), Identifier.STREAM_CODEC);
+            names.encode(buf, display.stepNames);
         }
     };
 
@@ -80,6 +97,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
 
     private final List<Identifier> stepTypes;
     private final List<EntryIngredient> stepEntries;
+    private final List<Component> stepNames;
 
     public CreateReiSequenceDisplay(
         List<EntryIngredient> inputs,
@@ -88,7 +106,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         List<Identifier> stepTypes,
         List<EntryIngredient> stepEntries,
         int loops,
-        Optional<Identifier> location
+        Optional<Identifier> location,
+        List<Component> stepNames
     ) {
         super(
             CreateReiDisplays.identifierOf(CreateReiCategories.SEQUENCED_ASSEMBLY),
@@ -103,6 +122,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         );
         this.stepTypes = List.copyOf(stepTypes);
         this.stepEntries = List.copyOf(stepEntries);
+        this.stepNames = List.copyOf(stepNames);
     }
 
     @Override
@@ -116,6 +136,15 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
 
     public List<EntryIngredient> stepEntries() {
         return stepEntries;
+    }
+
+    public Optional<Component> stepName(int step) {
+        if (step < 0 || step >= stepNames.size()) {
+            return Optional.empty();
+        }
+        Component name = stepNames.get(step);
+        boolean blank = name.getContents() instanceof PlainTextContents text && text.text().isEmpty() && name.getSiblings().isEmpty();
+        return blank ? Optional.empty() : Optional.of(name);
     }
 
     public int loops() {
