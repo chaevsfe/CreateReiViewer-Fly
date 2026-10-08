@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.joml.Matrix3x2f;
 
 public record PressDepotRenderState(Matrix3x2f pose, int x0, int y0, ScreenRectangle bounds) implements PictureInPictureRenderState {
-    public static final int TOP = 60;
+    public static final int TOP = 56;
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
     public static final int PRESS_ORIGIN = 64 - TOP;

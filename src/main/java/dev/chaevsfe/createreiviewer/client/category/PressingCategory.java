@@ -4,6 +4,7 @@ import com.zurrtum.create.AllItems;
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.render.PressRenderState;
 import dev.chaevsfe.createreiviewer.client.render.PressDepotRenderState;
+import dev.chaevsfe.createreiviewer.client.widget.CreateReiWidgets;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.client.widget.TwoItemRenderer;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
@@ -31,25 +32,32 @@ public class PressingCategory extends CreateReiCategory<CreateReiDisplay> {
 
     @Override
     protected int contentHeight() {
-        return 70;
+        return 85;
     }
 
     @Override
     protected int contentOverhangTop() {
-        return 16;
+        return 7;
     }
 
     @Override
     protected void build(CreateReiDisplay display, Panel panel) {
-        panel.texture(AllGuiTextures.JEI_SHADOW, 61, 41);
-        panel.texture(AllGuiTextures.JEI_LONG_ARROW, 52, 54);
-        panel.pip(73, -16, PressDepotRenderState::new);
-        panel.pip(73, -16, PressRenderState::new);
-
-        panel.slot(27, 51, display.inputs().get(0));
         List<EntryIngredient> outputs = display.outputs();
-        for (int i = 0; i < outputs.size(); i++) {
-            panel.output(131 + 19 * i, 51, outputs.get(i), display.chance(i));
+        int count = outputs.size();
+        panel.texture(AllGuiTextures.JEI_DOWN_ARROW, 136, (count <= 4 ? 32 : 41) - ((count - 1) / 2) * 19);
+        panel.texture(AllGuiTextures.JEI_SHADOW, 81, 68);
+        panel.pip(91, -7, PressDepotRenderState::new);
+        panel.pip(91, -7, PressRenderState::new);
+
+        panel.slot(CreateReiWidgets.basinInputX(0, 1), CreateReiWidgets.basinInputY(0, 1), display.inputs().get(0));
+        boolean centreLast = count % 2 != 0;
+        for (int i = 0; i < count; i++) {
+            panel.output(
+                CreateReiWidgets.basinOutputX(i, count - 1, centreLast),
+                CreateReiWidgets.basinOutputY(i, 51),
+                outputs.get(i),
+                display.chance(i)
+            );
         }
     }
 }
