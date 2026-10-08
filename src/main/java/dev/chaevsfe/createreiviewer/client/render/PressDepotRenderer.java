@@ -36,7 +36,7 @@ public class PressDepotRenderer extends PictureInPictureRenderer<PressDepotRende
         matrices.mulPose(Axis.YP.rotationDegrees(22.5f));
         matrices.translate(-0.5f, -1.14f, -0.5f);
         matrices.scale(1, -1, 1);
-        matrices.translate(0, -2.06f, 0);
+        matrices.translate(0, -1.8125f, 0);
         output.setPoseStack(matrices);
         BlockState depot = AllBlocks.DEPOT.defaultBlockState();
         SinglePosVirtualBlockGetter world = SinglePosVirtualBlockGetter.createFullBright().blockState(depot);
