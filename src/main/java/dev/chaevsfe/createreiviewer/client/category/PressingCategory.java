@@ -3,6 +3,7 @@ package dev.chaevsfe.createreiviewer.client.category;
 import com.zurrtum.create.AllItems;
 import com.zurrtum.create.client.foundation.gui.AllGuiTextures;
 import com.zurrtum.create.client.foundation.gui.render.PressRenderState;
+import dev.chaevsfe.createreiviewer.client.render.PressDepotRenderState;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.client.widget.TwoItemRenderer;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
@@ -42,6 +43,7 @@ public class PressingCategory extends CreateReiCategory<CreateReiDisplay> {
     protected void build(CreateReiDisplay display, Panel panel) {
         panel.texture(AllGuiTextures.JEI_SHADOW, 61, 41);
         panel.texture(AllGuiTextures.JEI_LONG_ARROW, 52, 54);
+        panel.pip(73, -16, PressDepotRenderState::new);
         panel.pip(73, -16, PressRenderState::new);
 
         panel.slot(27, 51, display.inputs().get(0));
