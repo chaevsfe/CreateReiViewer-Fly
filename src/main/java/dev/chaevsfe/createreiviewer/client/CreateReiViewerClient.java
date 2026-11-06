@@ -71,6 +71,7 @@ public class CreateReiViewerClient implements ClientModInitializer {
                     detail
                 );
                 reportAddons();
+                FlyPageGate.warnIfFallingBack();
             }
             return;
         }
@@ -85,6 +86,9 @@ public class CreateReiViewerClient implements ClientModInitializer {
             warned = true;
             if (!FlyPageGate.serverHasOurPages()) {
                 CreateReiViewer.LOGGER.info("This server does not send this mod's displays, so REI shows Create Fly's own pages");
+                return;
+            }
+            if (FlyPageGate.warnIfFallingBack()) {
                 return;
             }
             CreateReiViewer.LOGGER.warn(
