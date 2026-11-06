@@ -116,11 +116,7 @@ public final class CreateReiWidgets {
         }
         List<EntryStack<?>> decorated = new ArrayList<>(entries.size());
         for (EntryStack<?> stack : entries) {
-            EntryStack<?> copy = stack.copy();
-            for (Component line : lines) {
-                copy = copy.tooltip(line);
-            }
-            decorated.add(copy);
+            decorated.add(stack.copy().tooltip(lines));
         }
         return EntryIngredient.of(decorated);
     }
