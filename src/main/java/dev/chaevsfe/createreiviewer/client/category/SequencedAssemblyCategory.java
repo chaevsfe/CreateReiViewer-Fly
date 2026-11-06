@@ -10,6 +10,7 @@ import com.zurrtum.create.client.foundation.gui.render.SpoutRenderState;
 import dev.architectury.fluid.FluidStack;
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import dev.chaevsfe.createreiviewer.client.registry.ViewerClientPlugins;
+import dev.chaevsfe.createreiviewer.client.widget.CreateReiWidgets;
 import dev.chaevsfe.createreiviewer.client.widget.OneItemRenderer;
 import dev.chaevsfe.createreiviewer.client.widget.Panel;
 import dev.chaevsfe.createreiviewer.client.widget.ReiCanvas;
@@ -85,17 +86,22 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
         for (int i = 0; i < steps; i++) {
             int x = startX + 28 * i;
             EntryIngredient entries = display.stepEntries().get(i);
+            List<Component> stepLines = List.of(
+                Component.translatable("create.recipe.assembly.step", i + 1),
+                stepName(types.get(i), display.stepName(i)).copy().withStyle(ChatFormatting.DARK_GREEN)
+            );
             if (!entries.isEmpty()) {
                 panel.texture(AllGuiTextures.JEI_SLOT, x - 1, 14);
-                panel.bareSlot(x, 15, entries);
+                panel.bareSlot(x, 15, CreateReiWidgets.linesAbove(entries, stepLines));
             }
             String roman = ROMANS[Math.min(i, ROMANS.length - 1)];
             panel.text(Component.literal(roman), x + 8 - Minecraft.getInstance().font.width(roman) / 2, 2, LABEL_COLOR);
             step(panel, types.get(i), i, x, entries);
+            Component[] tooltip = stepLines.toArray(Component[]::new);
             if (entries.isEmpty()) {
-                panel.tooltip(x - 5, 0, 26, 86,
-                    Component.translatable("create.recipe.assembly.step", i + 1),
-                    stepName(types.get(i), display.stepName(i)).copy().withStyle(ChatFormatting.DARK_GREEN));
+                panel.tooltip(x - 5, 0, 26, 86, tooltip);
+            } else {
+                panel.tooltipAround(x - 5, 0, 26, 86, x - 1, 14, 18, tooltip);
             }
         }
     }

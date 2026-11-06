@@ -5,6 +5,7 @@ import com.zurrtum.create.client.foundation.gui.AllIcons;
 import com.zurrtum.create.client.foundation.gui.render.ManualBlockRenderState;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -74,6 +75,12 @@ public final class Panel {
 
     public void tooltip(int x, int y, int width, int height, Component... text) {
         widgets.add(Widgets.createTooltip(new Rectangle(ox + x, oy + y, width, height), text));
+    }
+
+    public void tooltipAround(int x, int y, int width, int height, int holeX, int holeY, int holeSize, Component... text) {
+        Rectangle area = new Rectangle(ox + x, oy + y, width, height);
+        Rectangle hole = new Rectangle(ox + holeX, oy + holeY, holeSize, holeSize);
+        widgets.add(Widgets.createTooltip(point -> area.contains(point) && !hole.contains(point) ? Tooltip.create(point, text) : null));
     }
 
     public void pip(int x, int y, PipFactory factory) {
