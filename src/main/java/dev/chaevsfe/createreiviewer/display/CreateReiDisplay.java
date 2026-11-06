@@ -7,10 +7,15 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
+import me.shedaniel.rei.api.common.entry.InputIngredient;
+import me.shedaniel.rei.api.common.util.CollectionUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,6 +130,16 @@ public class CreateReiDisplay extends BasicDisplay {
             padded.add(i < chances.size() ? chances.get(i) : 1.0f);
         }
         return Collections.unmodifiableList(padded);
+    }
+
+    @Override
+    public List<InputIngredient<EntryStack<?>>> getInputIngredients(AbstractContainerMenu menu, Player player) {
+        return CollectionUtils.mapIndexed(getRequiredEntries(), InputIngredient::of);
+    }
+
+    @Override
+    public List<EntryIngredient> getRequiredEntries() {
+        return recipeInputs;
     }
 
     @Override
