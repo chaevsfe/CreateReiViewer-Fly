@@ -92,6 +92,12 @@ public final class CreateReiWidgets {
         return slot(x, y, EntryIngredient.of(decorated)).markOutput();
     }
 
+    public static EntryIngredient notConsumed(EntryIngredient entries) {
+        return EntryIngredient.of(entries.stream().<EntryStack<?>>map(stack -> linesAt(stack, 1, List.of(
+            Component.translatable("create.recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD)
+        ))).toList());
+    }
+
     public static EntryIngredient linesAbove(EntryIngredient entries, List<Component> lines) {
         return EntryIngredient.of(entries.stream().<EntryStack<?>>map(stack -> linesAt(stack, 0, lines)).toList());
     }
