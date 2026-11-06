@@ -16,6 +16,8 @@ public class CreateReiViewer implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("Create Fly Recipe Viewer");
     public static final String REI_MOD_ID = "roughlyenoughitems";
 
+    private static boolean sequencedAssemblySyncFixed;
+
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
@@ -40,7 +42,7 @@ public class CreateReiViewer implements ModInitializer {
                 : "Create sequenced assembly steps are decoded with this side's own recipe serializer ids, as in Create Fly"
         );
         if (syncFix) {
-            SequencedAssemblySyncFix.apply();
+            applySequencedAssemblySyncFix();
         } else if (recipeViewerNeedingTheFix() != null) {
             LOGGER.warn(
                 "{} is installed and {} is false in {}: this client disconnects while decoding Create sequenced assembly recipes from a server that numbers its recipe serializers differently. Set {} to true in that file to decode them with the server's ids.",
@@ -50,6 +52,19 @@ public class CreateReiViewer implements ModInitializer {
                 ViewerConfig.FIX_SEQUENCED_ASSEMBLY_SYNC
             );
         }
+    }
+
+    private static void applySequencedAssemblySyncFix() {
+        try {
+            SequencedAssemblySyncFix.apply();
+            sequencedAssemblySyncFixed = true;
+        } catch (RuntimeException | LinkageError error) {
+            LOGGER.warn("Create Fly's sequenced assembly recipe changed, so its steps are decoded with this side's own recipe serializer ids", error);
+        }
+    }
+
+    public static boolean sequencedAssemblySyncFixed() {
+        return sequencedAssemblySyncFixed;
     }
 
     public static boolean reiLoaded() {
