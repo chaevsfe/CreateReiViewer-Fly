@@ -204,9 +204,12 @@ public final class CreateReiDisplays {
         List<Float> chances = new ArrayList<>(2);
         outputs.add(CreateReiEntries.output(recipe.result()));
         chances.add(recipe.result().chance());
-        if (!recipe.junks().isEmpty()) {
+        float salvageChance = 1.0f - recipe.result().chance();
+        List<Float> salvageOdds = List.of();
+        if (!recipe.junks().isEmpty() && salvageChance > 0.0f) {
             outputs.add(CreateReiEntries.outputs(recipe.junks()));
-            chances.add(1.0f - recipe.result().chance());
+            chances.add(salvageChance);
+            salvageOdds = salvageOdds(recipe.junks(), salvageChance);
         }
 
         return new CreateReiSequenceDisplay(
@@ -217,8 +220,21 @@ public final class CreateReiDisplays {
             stepEntries,
             loops,
             locationOf(holder),
-            stepNames
+            stepNames,
+            salvageOdds
         );
+    }
+
+    private static List<Float> salvageOdds(List<ProcessingOutput> junks, float salvageChance) {
+        float weights = 0.0f;
+        for (ProcessingOutput junk : junks) {
+            weights += junk.chance();
+        }
+        List<Float> odds = new ArrayList<>(junks.size());
+        for (ProcessingOutput junk : junks) {
+            odds.add(salvageChance * junk.chance() / weights);
+        }
+        return odds;
     }
 
     public static CreateReiDisplay mysteryConversion(String path, net.minecraft.world.item.Item input, net.minecraft.world.item.Item output) {

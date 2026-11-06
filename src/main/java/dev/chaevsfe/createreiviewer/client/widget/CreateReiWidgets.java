@@ -6,6 +6,7 @@ import com.zurrtum.create.client.foundation.utility.CreateLang;
 import com.zurrtum.create.content.processing.recipe.HeatCondition;
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
+import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -20,6 +21,7 @@ import org.joml.Matrix3x2fStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public final class CreateReiWidgets {
@@ -79,14 +81,23 @@ public final class CreateReiWidgets {
         return slot(x, y, withTooltip(entries, chanceLine(chance))).markOutput();
     }
 
-    public static Slot junkSlot(int x, int y, EntryIngredient entries, float chance) {
-        List<Component> lines = new ArrayList<>(2);
-        lines.add(Component.translatable("create.recipe.assembly.junk").withStyle(ChatFormatting.GOLD));
-        Component chanceLine = chanceLine(chance);
-        if (chanceLine != null) {
-            lines.add(chanceLine);
+    public static Slot junkSlot(int x, int y, EntryIngredient entries, IntFunction<Float> odds) {
+        List<EntryStack<?>> decorated = new ArrayList<>(entries.size());
+        for (int i = 0; i < entries.size(); i++) {
+            decorated.add(linesAt(entries.get(i), 1, List.of(
+                Component.translatable("create.recipe.assembly.junk").withStyle(ChatFormatting.GOLD),
+                Component.translatable("create.recipe.processing.chance", oddsArgument(odds.apply(i))).withStyle(ChatFormatting.GOLD)
+            )));
         }
-        return slot(x, y, withTooltips(entries, lines)).markOutput();
+        return slot(x, y, EntryIngredient.of(decorated)).markOutput();
+    }
+
+    private static <T> EntryStack<T> linesAt(EntryStack<T> stack, int index, List<Component> lines) {
+        return stack.copy().tooltipProcessor((entry, tooltip) -> {
+            List<Tooltip.Entry> entries = tooltip.entries();
+            entries.addAll(Math.min(index, entries.size()), lines.stream().map(Tooltip::entry).toList());
+            return tooltip;
+        });
     }
 
     public static EntryIngredient keepHeld(EntryIngredient entries) {
@@ -124,6 +135,14 @@ public final class CreateReiWidgets {
     private static Object chanceArgument(float chance) {
         int percent = (int) (chance * 100.0f);
         return percent == 0 ? "<1" : Integer.valueOf(percent);
+    }
+
+    private static Object oddsArgument(float odds) {
+        int tenths = Math.round(odds * 1000.0f);
+        if (tenths == 0) {
+            return "<0.1";
+        }
+        return tenths % 10 == 0 ? String.valueOf(tenths / 10) : tenths / 10 + "." + tenths % 10;
     }
 
     public static int basinInputX(int index, int count) {
