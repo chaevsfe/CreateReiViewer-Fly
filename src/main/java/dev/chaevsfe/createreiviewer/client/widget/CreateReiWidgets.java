@@ -92,6 +92,10 @@ public final class CreateReiWidgets {
         return slot(x, y, EntryIngredient.of(decorated)).markOutput();
     }
 
+    public static EntryIngredient linesAbove(EntryIngredient entries, List<Component> lines) {
+        return EntryIngredient.of(entries.stream().<EntryStack<?>>map(stack -> linesAt(stack, 0, lines)).toList());
+    }
+
     private static <T> EntryStack<T> linesAt(EntryStack<T> stack, int index, List<Component> lines) {
         return stack.copy().tooltipProcessor((entry, tooltip) -> {
             List<Tooltip.Entry> entries = tooltip.entries();
