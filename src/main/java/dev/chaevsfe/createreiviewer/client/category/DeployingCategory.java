@@ -69,6 +69,6 @@ public class DeployingCategory extends CreateReiCategory<CreateReiDisplay> {
         if ((display.flags() & CreateReiDisplays.KEEP_HELD_ITEM) == 0) {
             return held;
         }
-        return CreateReiWidgets.keepHeld(held);
+        return CreateReiWidgets.notConsumed(held);
     }
 }
