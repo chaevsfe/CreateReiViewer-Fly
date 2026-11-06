@@ -69,7 +69,7 @@ public class SequencedAssemblyCategory extends CreateReiCategory<CreateReiSequen
         panel.slot(22 + shift, 91, display.inputs().get(0));
         panel.output(127 + shift, 91, display.outputs().get(0), display.chance(0));
         if (junk) {
-            panel.junk(146 + shift, 91, display.outputs().get(1), display.chance(1));
+            panel.junk(146 + shift, 91, display.outputs().get(1), display::salvageOdds);
         }
 
         panel.texture(AllGuiTextures.JEI_LONG_ARROW, shift + 47, 94);
