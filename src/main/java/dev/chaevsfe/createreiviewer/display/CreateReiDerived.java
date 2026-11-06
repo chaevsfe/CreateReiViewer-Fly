@@ -38,6 +38,8 @@ import net.minecraft.world.item.crafting.SingleItemRecipe;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.Level;
 import net.minecraft.util.context.ContextMap;
 
@@ -45,11 +47,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class CreateReiDerived {
     private static final int BUCKET = 81000;
     private static final int POTION_AMOUNT = 27000;
     private static final int BLOCK_CUTTING_SLOTS = 15;
+    private static final Set<Item> POTION_ITEMS = Set.of(Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION);
 
     private RecipeMap recipes;
     private Level level;
@@ -173,11 +177,15 @@ public final class CreateReiDerived {
             }
             for (FluidStack fluid : fluids) {
                 try (FluidItemInventory target = FluidHelper.getFluidInventory(stack.copy())) {
-                    if (target == null || target.insert(fluid, BUCKET) <= 0) {
+                    if (target == null) {
+                        continue;
+                    }
+                    int inserted = target.insert(fluid, BUCKET);
+                    if (inserted <= 0) {
                         continue;
                     }
                     ItemStack filled = target.getContainer();
-                    if (filled.isEmpty() || !filled.is(stack.getItem())) {
+                    if (filled.isEmpty() || filled.is(stack.getItem()) || PotionFluidHandler.isPotionItem(filled)) {
                         continue;
                     }
                     displays.add(CreateReiDisplays.spoutFilling(new RecipeHolder<>(
@@ -185,7 +193,7 @@ public final class CreateReiDerived {
                         new FillingRecipe(
                             ItemStackTemplate.fromNonEmptyStack(filled),
                             exactIngredient(stack),
-                            new FluidStackIngredient(fluid.getFluid(), fluid.getComponentChanges(), BUCKET)
+                            new FluidStackIngredient(fluid.getFluid(), fluid.getComponentChanges(), inserted)
                         )
                     )));
                 }
@@ -233,13 +241,25 @@ public final class CreateReiDerived {
 
     private List<ItemStack> itemEntries() {
         List<ItemStack> stacks = new ArrayList<>();
+        FeatureFlagSet features = enabledFeatures();
         for (Item item : BuiltInRegistries.ITEM) {
+            if (POTION_ITEMS.contains(item)) {
+                BuiltInRegistries.POTION.listElements()
+                    .filter(potion -> potion.value().isEnabled(features))
+                    .forEach(potion -> stacks.add(PotionContents.createItemStack(item, potion)));
+                continue;
+            }
             ItemStack stack = item.getDefaultInstance();
             if (!stack.isEmpty()) {
                 stacks.add(stack);
             }
         }
         return stacks;
+    }
+
+    private static FeatureFlagSet enabledFeatures() {
+        MinecraftServer server = GameInstance.getServer();
+        return server == null ? FeatureFlags.DEFAULT_FLAGS : server.getWorldData().enabledFeatures();
     }
 
     private List<FluidStack> sourceFluids() {
