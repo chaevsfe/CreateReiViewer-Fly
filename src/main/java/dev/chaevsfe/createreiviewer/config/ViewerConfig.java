@@ -17,7 +17,6 @@ public final class ViewerConfig {
     public static final String FILE_NAME = CreateReiViewer.MOD_ID + ".json";
     public static final String FIX_SEQUENCED_ASSEMBLY_SYNC = "fixSequencedAssemblySync";
     public static final String RESYNC_AFTER_RELOAD = "resyncAfterReload";
-    public static final String FIX_JEI_VANILLA_RECIPE_TAGS = "fixJeiVanillaRecipeTags";
     public static final String CONFIG_VERSION = "configVersion";
     private static final int CURRENT_VERSION = 2;
 
@@ -25,7 +24,6 @@ public final class ViewerConfig {
     private static boolean fixSequencedAssemblySync = true;
     private static boolean raisedOldSyncDefault;
     private static boolean resyncAfterReload = true;
-    private static boolean fixJeiVanillaRecipeTags = true;
 
     private ViewerConfig() {
     }
@@ -44,13 +42,6 @@ public final class ViewerConfig {
         return resyncAfterReload;
     }
 
-    public static synchronized boolean fixJeiVanillaRecipeTags() {
-        if (!loaded) {
-            load();
-        }
-        return fixJeiVanillaRecipeTags;
-    }
-
     public static synchronized boolean raisedOldSyncDefault() {
         if (!loaded) {
             load();
@@ -67,7 +58,6 @@ public final class ViewerConfig {
         fixSequencedAssemblySync = true;
         raisedOldSyncDefault = false;
         resyncAfterReload = true;
-        fixJeiVanillaRecipeTags = true;
         Path file = path();
         if (!Files.isRegularFile(file)) {
             write(file);
@@ -96,12 +86,6 @@ public final class ViewerConfig {
             } else {
                 resyncAfterReload = resync.getAsBoolean();
             }
-            JsonElement jeiTags = object.get(FIX_JEI_VANILLA_RECIPE_TAGS);
-            if (jeiTags == null) {
-                complete = false;
-            } else {
-                fixJeiVanillaRecipeTags = jeiTags.getAsBoolean();
-            }
             if (!complete) {
                 write(file);
             }
@@ -115,7 +99,6 @@ public final class ViewerConfig {
         object.addProperty(CONFIG_VERSION, CURRENT_VERSION);
         object.addProperty(FIX_SEQUENCED_ASSEMBLY_SYNC, fixSequencedAssemblySync);
         object.addProperty(RESYNC_AFTER_RELOAD, resyncAfterReload);
-        object.addProperty(FIX_JEI_VANILLA_RECIPE_TAGS, fixJeiVanillaRecipeTags);
         try {
             Files.createDirectories(file.getParent());
             try (Writer writer = Files.newBufferedWriter(file)) {
