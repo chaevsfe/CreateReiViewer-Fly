@@ -63,14 +63,15 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             int loops = buf.readVarInt();
             Optional<Identifier> location = buf.readOptional(Identifier.STREAM_CODEC);
             List<Component> stepNames = List.of();
+            List<Float> salvageOdds = List.of();
             if (buf.isReadable()) {
                 try {
                     stepNames = names.decode(buf);
+                    salvageOdds = buf.isReadable() ? odds.decode(buf) : List.of();
                 } catch (RuntimeException exception) {
                     CreateReiViewer.LOGGER.debug("Could not read the step names of sequenced assembly display {}", location.orElse(null), exception);
                 }
             }
-            List<Float> salvageOdds = buf.isReadable() ? odds.decode(buf) : List.of();
             return new CreateReiSequenceDisplay(
                 inputs,
                 outputs,
@@ -191,7 +192,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
     }
 
     public float salvageOdds(int index) {
-        return index >= 0 && index < salvageOdds.size() ? salvageOdds.get(index) : 0.0f;
+        return index >= 0 && index < salvageOdds.size() ? salvageOdds.get(index) : chance(1);
     }
 
     public int steps() {
