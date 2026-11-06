@@ -1,5 +1,5 @@
 {
-  "required": true,
+  "required": false,
   "package": "dev.chaevsfe.createreiviewer.client.mixin",
   "compatibilityLevel": "JAVA_25",
   "minVersion": "0.8.3",
@@ -28,6 +28,6 @@
     "darkgui.WorldshaperScreenMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 0
   }
 }

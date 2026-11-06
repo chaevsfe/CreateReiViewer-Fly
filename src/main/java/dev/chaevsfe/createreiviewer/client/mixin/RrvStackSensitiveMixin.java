@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class RrvStackSensitiveMixin {
     @Redirect(
         method = "register",
-        at = @At(value = "INVOKE", target = "Ljava/util/HashMap;get(Ljava/lang/Object;)Ljava/lang/Object;"),
-        require = 3
+        at = @At(value = "INVOKE", target = "Ljava/util/HashMap;get(Ljava/lang/Object;)Ljava/lang/Object;")
     )
     private static Object createreiviewer$stackSensitiveOrEmpty(HashMap<Object, Object> stackSensitive, Object key) {
         Object views = stackSensitive.get(key);
