@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public final class Panel {
@@ -55,9 +56,9 @@ public final class Panel {
         widgets.add(CreateReiWidgets.outputSlot(ox + x, oy + y, entries, chance));
     }
 
-    public void junk(int x, int y, EntryIngredient entries, float chance) {
+    public void junk(int x, int y, EntryIngredient entries, IntFunction<Float> odds) {
         texture(AllGuiTextures.JEI_CHANCE_SLOT, x - 1, y - 1);
-        widgets.add(CreateReiWidgets.junkSlot(ox + x, oy + y, entries, chance));
+        widgets.add(CreateReiWidgets.junkSlot(ox + x, oy + y, entries, odds));
     }
 
     public void text(Component text, int x, int y, int color) {

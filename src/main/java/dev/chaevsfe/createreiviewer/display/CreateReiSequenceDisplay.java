@@ -33,7 +33,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         EntryIngredient.codec().listOf().fieldOf("step_entries").forGetter(display -> display.stepEntries),
         Codec.INT.fieldOf("loops").forGetter(CreateReiDisplay::flags),
         Identifier.CODEC.optionalFieldOf("location").forGetter(CreateReiDisplay::getDisplayLocation),
-        ComponentSerialization.CODEC.listOf().lenientOptionalFieldOf("step_names", List.of()).forGetter(display -> display.stepNames)
+        ComponentSerialization.CODEC.listOf().lenientOptionalFieldOf("step_names", List.of()).forGetter(display -> display.stepNames),
+        Codec.FLOAT.listOf().lenientOptionalFieldOf("salvage_odds", List.of()).forGetter(display -> display.salvageOdds)
     ).apply(instance, CreateReiSequenceDisplay::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CreateReiSequenceDisplay> STREAM_CODEC = new StreamCodec<>() {
@@ -41,6 +42,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             EntryIngredient.streamCodec().apply(ByteBufCodecs.list());
         private final StreamCodec<RegistryFriendlyByteBuf, List<Component>> names =
             ComponentSerialization.STREAM_CODEC.apply(ByteBufCodecs.list());
+        private final StreamCodec<RegistryFriendlyByteBuf, List<Float>> odds =
+            ByteBufCodecs.FLOAT.<RegistryFriendlyByteBuf>cast().apply(ByteBufCodecs.list());
 
         @Override
         public CreateReiSequenceDisplay decode(RegistryFriendlyByteBuf buf) {
@@ -67,6 +70,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
                     CreateReiViewer.LOGGER.debug("Could not read the step names of sequenced assembly display {}", location.orElse(null), exception);
                 }
             }
+            List<Float> salvageOdds = buf.isReadable() ? odds.decode(buf) : List.of();
             return new CreateReiSequenceDisplay(
                 inputs,
                 outputs,
@@ -75,7 +79,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
                 stepEntries,
                 loops,
                 location,
-                stepNames
+                stepNames,
+                salvageOdds
             );
         }
 
@@ -95,6 +100,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             buf.writeVarInt(display.flags());
             buf.writeOptional(display.getDisplayLocation(), Identifier.STREAM_CODEC);
             names.encode(buf, display.stepNames);
+            odds.encode(buf, display.salvageOdds);
         }
     };
 
@@ -103,6 +109,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
     private final List<Identifier> stepTypes;
     private final List<EntryIngredient> stepEntries;
     private final List<Component> stepNames;
+    private final List<Float> salvageOdds;
 
     public CreateReiSequenceDisplay(
         List<EntryIngredient> inputs,
@@ -112,7 +119,8 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         List<EntryIngredient> stepEntries,
         int loops,
         Optional<Identifier> location,
-        List<Component> stepNames
+        List<Component> stepNames,
+        List<Float> salvageOdds
     ) {
         super(
             CreateReiDisplays.identifierOf(CreateReiCategories.SEQUENCED_ASSEMBLY),
@@ -128,6 +136,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         this.stepTypes = List.copyOf(stepTypes);
         this.stepEntries = List.copyOf(stepEntries);
         this.stepNames = List.copyOf(stepNames);
+        this.salvageOdds = List.copyOf(salvageOdds);
     }
 
     private static List<EntryIngredient> stepItems(List<EntryIngredient> stepEntries) {
@@ -138,6 +147,11 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
             }
         }
         return items;
+    }
+
+    @Override
+    public List<EntryIngredient> getOutputEntries() {
+        return outputs().subList(0, Math.min(1, outputs().size()));
     }
 
     @Override
@@ -174,6 +188,10 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
 
     public int loops() {
         return flags();
+    }
+
+    public float salvageOdds(int index) {
+        return index >= 0 && index < salvageOdds.size() ? salvageOdds.get(index) : 0.0f;
     }
 
     public int steps() {
