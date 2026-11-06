@@ -5,3 +5,4 @@ accessible field net/minecraft/world/item/crafting/ShapelessRecipe ingredients L
 accessible field net/minecraft/world/item/crafting/ShapelessRecipe result Lnet/minecraft/world/item/ItemStackTemplate;
 accessible field net/minecraft/world/item/crafting/ShapedRecipe result Lnet/minecraft/world/item/ItemStackTemplate;
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStackTemplate;
+accessible class net/minecraft/resources/RegistryLoadTask$PendingRegistration

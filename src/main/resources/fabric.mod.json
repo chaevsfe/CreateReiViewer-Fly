@@ -38,6 +38,7 @@
   "mixins": [
     "createreiviewer.mixins.json",
     "createreiviewer.architectury.mixins.json",
+    "createreiviewer.fly.mixins.json",
     {
       "config": "createreiviewer.client.mixins.json",
       "environment": "client"
