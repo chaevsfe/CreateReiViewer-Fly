@@ -10,6 +10,7 @@ import dev.chaevsfe.createreiviewer.display.CreateReiDisplay;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import net.minecraft.world.item.Items;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class AutomaticPackingCategory extends CreateReiCategory<CreateReiDisplay
 
     @Override
     public Renderer getIcon() {
-        return new TwoItemRenderer(AllItems.MECHANICAL_PRESS, AllItems.BASIN);
+        return new TwoItemRenderer(AllItems.MECHANICAL_PRESS, Items.CRAFTING_TABLE);
     }
 
     @Override
