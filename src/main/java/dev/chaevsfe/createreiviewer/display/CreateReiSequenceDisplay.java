@@ -7,6 +7,9 @@ import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
+import me.shedaniel.rei.api.common.entry.InputIngredient;
+import me.shedaniel.rei.api.common.util.CollectionUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -14,6 +17,8 @@ import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +117,7 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         super(
             CreateReiDisplays.identifierOf(CreateReiCategories.SEQUENCED_ASSEMBLY),
             inputs,
-            List.of(),
+            stepItems(stepEntries),
             outputs,
             chances,
             0,
@@ -123,6 +128,26 @@ public class CreateReiSequenceDisplay extends CreateReiDisplay {
         this.stepTypes = List.copyOf(stepTypes);
         this.stepEntries = List.copyOf(stepEntries);
         this.stepNames = List.copyOf(stepNames);
+    }
+
+    private static List<EntryIngredient> stepItems(List<EntryIngredient> stepEntries) {
+        List<EntryIngredient> items = new ArrayList<>(stepEntries.size());
+        for (EntryIngredient entries : stepEntries) {
+            if (!entries.isEmpty()) {
+                items.add(entries);
+            }
+        }
+        return items;
+    }
+
+    @Override
+    public List<InputIngredient<EntryStack<?>>> getInputIngredients(AbstractContainerMenu menu, Player player) {
+        return CollectionUtils.mapIndexed(getRequiredEntries(), InputIngredient::of);
+    }
+
+    @Override
+    public List<EntryIngredient> getRequiredEntries() {
+        return getInputEntries();
     }
 
     @Override
