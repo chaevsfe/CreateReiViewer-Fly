@@ -36,6 +36,7 @@ import dev.chaevsfe.createreiviewer.registry.ViewerPlugins;
 import me.shedaniel.rei.api.client.entry.renderer.EntryRendererRegistry;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
@@ -124,6 +125,11 @@ public class CreateReiClientPlugin implements REIClientPlugin {
         registerExtraWorkstations(registry);
     }
 
+    @Override
+    public void registerDisplays(DisplayRegistry registry) {
+        FlyPageGate.register(registry);
+    }
+
     private static void registerExtraWorkstations(CategoryRegistry registry) {
         for (ViewerClientPlugins.Workstations extra : ViewerClientPlugins.workstations()) {
             CategoryIdentifier<?> identifier = reiCategory(extra.category());
@@ -194,6 +200,7 @@ public class CreateReiClientPlugin implements REIClientPlugin {
         if (stage == ReloadStage.END) {
             ResyncClient.onReloadEnded();
             try {
+                FlyPageGate.checkFlyCategories();
                 logCategoryOrder();
             } catch (RuntimeException exception) {
                 CreateReiViewer.LOGGER.warn("Could not read the REI category order", exception);

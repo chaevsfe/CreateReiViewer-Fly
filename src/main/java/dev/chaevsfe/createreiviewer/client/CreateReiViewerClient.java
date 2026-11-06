@@ -83,8 +83,12 @@ public class CreateReiViewerClient implements ClientModInitializer {
         }
         if (ticksSinceJoin >= GIVE_UP_TICKS && !warned) {
             warned = true;
+            if (!FlyPageGate.serverHasOurPages()) {
+                CreateReiViewer.LOGGER.info("This server does not send this mod's displays, so REI shows Create Fly's own pages");
+                return;
+            }
             CreateReiViewer.LOGGER.warn(
-                "Client received ZERO synced displays {} ticks after joining ({}); the server is missing this mod, or the sync failed",
+                "Client received ZERO synced displays {} ticks after joining ({}); the sync failed",
                 ticksSinceJoin,
                 detail
             );
