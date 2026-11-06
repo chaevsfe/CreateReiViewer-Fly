@@ -1,7 +1,7 @@
 import java.util.zip.ZipFile
 
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.19-SNAPSHOT"
 }
 
 group = property("maven_group") as String
@@ -22,7 +22,10 @@ repositories {
         content { includeGroup("maven.modrinth") }
     }
     maven("https://maven.blamejared.com/") {
-        content { includeGroup("mezz.jei") }
+        content {
+            includeGroup("mezz.jei")
+            includeGroup("net.mezzdev.config")
+        }
     }
     maven("https://maven.shedaniel.me/") {
         content {
@@ -42,7 +45,7 @@ dependencies {
     implementation("me.shedaniel.cloth:basic-math:${property("basic_math_version")}")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-    compileOnly("mezz.jei:jei-26.2-fabric:${property("jei_version")}")
+    compileOnly("mezz.jei:jei-26.3-fabric:${property("jei_version")}")
 }
 
 java {
