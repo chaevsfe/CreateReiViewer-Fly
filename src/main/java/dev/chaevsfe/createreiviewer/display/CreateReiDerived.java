@@ -6,6 +6,7 @@ import com.zurrtum.create.AllRecipeTypes;
 import com.zurrtum.create.content.fluids.potion.PotionFluidHandler;
 import com.zurrtum.create.content.fluids.transfer.EmptyingRecipe;
 import com.zurrtum.create.content.fluids.transfer.FillingRecipe;
+import com.zurrtum.create.content.fluids.transfer.GenericItemFilling;
 import com.zurrtum.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.zurrtum.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.zurrtum.create.content.processing.recipe.ProcessingOutput;
@@ -172,7 +173,7 @@ public final class CreateReiDerived {
                 )));
                 return displays;
             }
-            if (inventory.size() != 1 || !inventory.getStack(0).isEmpty()) {
+            if (inventory.size() != 1 || !inventory.getStack(0).isEmpty() || !spoutAccepts(stack)) {
                 return displays;
             }
             for (FluidStack fluid : fluids) {
@@ -185,7 +186,7 @@ public final class CreateReiDerived {
                         continue;
                     }
                     ItemStack filled = target.getContainer();
-                    if (filled.isEmpty() || filled.is(stack.getItem()) || PotionFluidHandler.isPotionItem(filled)) {
+                    if (filled.isEmpty() || ItemStack.isSameItemSameComponents(filled, stack) || PotionFluidHandler.isPotionItem(filled)) {
                         continue;
                     }
                     displays.add(CreateReiDisplays.spoutFilling(new RecipeHolder<>(
@@ -200,6 +201,11 @@ public final class CreateReiDerived {
             }
         }
         return displays;
+    }
+
+    private static boolean spoutAccepts(ItemStack stack) {
+        MinecraftServer server = GameInstance.getServer();
+        return server == null || GenericItemFilling.canItemBeFilled(server.overworld(), stack);
     }
 
     private boolean coveredBy(RecipeType<? extends Recipe<SingleRecipeInput>> type, SingleRecipeInput input) {
