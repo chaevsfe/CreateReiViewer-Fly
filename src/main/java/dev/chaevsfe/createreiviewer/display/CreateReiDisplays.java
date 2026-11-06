@@ -369,7 +369,7 @@ public final class CreateReiDisplays {
             return CommonComponents.EMPTY;
         }
         try {
-            return Recipe.CODEC.encodeStart(ops, step).result()
+            return Recipe.DIRECT_CODEC.encodeStart(ops, step).result()
                 .map(json -> AllAssemblyRecipeNames.get(ops, json))
                 .orElse(CommonComponents.EMPTY);
         } catch (RuntimeException exception) {

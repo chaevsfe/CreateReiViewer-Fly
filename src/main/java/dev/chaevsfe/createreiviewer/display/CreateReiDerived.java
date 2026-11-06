@@ -291,7 +291,7 @@ public final class CreateReiDerived {
 
     private RecipeMap recipeMap() {
         if (recipes == null) {
-            recipes = RecipeMap.create(server().getRecipeManager().getRecipes());
+            recipes = RecipeMap.create(server().reloadableRegistries().lookup().lookupOrThrow(Registries.RECIPE));
         }
         return recipes;
     }
