@@ -1,5 +1,7 @@
 package dev.chaevsfe.createreiviewer.plugin;
 
+import com.zurrtum.create.AllDataComponents;
+import com.zurrtum.create.AllFluids;
 import com.zurrtum.create.AllRecipeTypes;
 import com.zurrtum.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.zurrtum.create.content.fluids.transfer.EmptyingRecipe;
@@ -18,6 +20,7 @@ import com.zurrtum.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.zurrtum.create.content.kinetics.press.PressingRecipe;
 import com.zurrtum.create.content.kinetics.saw.CuttingRecipe;
 import com.zurrtum.create.content.processing.sequenced.SequencedAssemblyRecipe;
+import com.zurrtum.create.infrastructure.component.BottleType;
 import dev.chaevsfe.createreiviewer.CreateReiViewer;
 import dev.chaevsfe.createreiviewer.api.CreateReiApi;
 import dev.chaevsfe.createreiviewer.display.CreateReiCategories;
@@ -32,13 +35,17 @@ import io.netty.buffer.Unpooled;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
+import me.shedaniel.rei.api.common.entry.comparison.FluidComparatorRegistry;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.plugins.REICommonPlugin;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -48,6 +55,7 @@ import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class CreateReiCommonPlugin implements REICommonPlugin {
@@ -61,6 +69,17 @@ public class CreateReiCommonPlugin implements REICommonPlugin {
     @Override
     public void registerDisplaySerializer(DisplaySerializerRegistry registry) {
         CreateReiSerializers.register("the plugin reload", registry);
+    }
+
+    @Override
+    public void registerFluidComparators(FluidComparatorRegistry registry) {
+        registry.register((context, stack) -> {
+            DataComponentMap components = stack.getComponents();
+            return Objects.hash(
+                components.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY),
+                components.getOrDefault(AllDataComponents.POTION_FLUID_BOTTLE_TYPE, BottleType.REGULAR)
+            );
+        }, AllFluids.POTION);
     }
 
     @Override
