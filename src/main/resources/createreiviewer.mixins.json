@@ -6,7 +6,7 @@
   "mixins": [
     "RecipeManagerPluginsMixin",
     "RecipeSerializerAccessor",
-    "TrainBlockStateKeysMixin"
+    "OldTrainDataMixin"
   ],
   "injectors": {
     "defaultRequire": 1
