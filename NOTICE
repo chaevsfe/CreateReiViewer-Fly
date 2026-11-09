@@ -26,8 +26,10 @@ Linked, not bundled
 -------------------
 Textures and translation keys are referenced from Create Fly's own jar by
 identifier at runtime. Create's assets are All Rights Reserved and are not
-redistributed here. This mod ships no textures, models or translations of its
-own.
+redistributed here. Apart from its icon, which enlarges Minecraft's knowledge
+book item sprite (Mojang's art) on this project's own background, and the
+dark GUI pack's own icon, this mod ships no textures, models or translations
+of its own.
 
 Dependencies (not bundled)
 --------------------------
