@@ -6,7 +6,8 @@
   "mixins": [
     "RecipeManagerPluginsMixin",
     "RecipeSerializerAccessor",
-    "OldTrainDataMixin"
+    "OldTrainDataMixin",
+    "OldWorldDataMixin"
   ],
   "injectors": {
     "defaultRequire": 1
