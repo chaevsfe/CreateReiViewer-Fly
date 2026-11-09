@@ -1,5 +1,6 @@
 package dev.chaevsfe.createreiviewer;
 
+import dev.chaevsfe.createreiviewer.compat.ReiSupport;
 import dev.chaevsfe.createreiviewer.compat.jei.SequencedAssemblySyncFix;
 import dev.chaevsfe.createreiviewer.config.ViewerConfig;
 import dev.chaevsfe.createreiviewer.net.ResyncPayloads;
@@ -25,7 +26,7 @@ public class CreateReiViewer implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Create Fly Recipe Viewer loaded");
-        if (reiLoaded()) {
+        if (reiSupported()) {
             ResyncPayloads.register();
             ResyncServer.register();
         }
@@ -67,8 +68,8 @@ public class CreateReiViewer implements ModInitializer {
         return sequencedAssemblySyncFixed;
     }
 
-    public static boolean reiLoaded() {
-        return FabricLoader.getInstance().isModLoaded(REI_MOD_ID);
+    public static boolean reiSupported() {
+        return ReiSupport.enabled();
     }
 
     private static String recipeViewerNeedingTheFix() {

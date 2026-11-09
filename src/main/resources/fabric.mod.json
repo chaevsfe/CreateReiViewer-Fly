@@ -26,10 +26,10 @@
       "dev.chaevsfe.createreiviewer.client.ViewerClient"
     ],
     "rei_common": [
-      "dev.chaevsfe.createreiviewer.plugin.CreateReiCommonPlugin"
+      "dev.chaevsfe.createreiviewer.plugin.ReiCommonEntry"
     ],
     "rei_client": [
-      "dev.chaevsfe.createreiviewer.client.CreateReiClientPlugin"
+      "dev.chaevsfe.createreiviewer.client.ReiClientEntry"
     ],
     "jei_mod_plugin": [
       "dev.chaevsfe.createreiviewer.client.jei.ViewerJeiPlugin"
@@ -55,8 +55,5 @@
   "suggests": {
     "roughlyenoughitems": "*",
     "jei": "*"
-  },
-  "breaks": {
-    "roughlyenoughitems": "${rei_version_breaks}"
   }
 }

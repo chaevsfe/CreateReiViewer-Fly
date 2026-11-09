@@ -15,7 +15,7 @@ public class ViewerClient implements ClientModInitializer {
             SerializerIdsClient.register();
         }
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> ViewerPlugins.load());
-        if (CreateReiViewer.reiLoaded()) {
+        if (CreateReiViewer.reiSupported()) {
             new CreateReiViewerClient().onInitializeClient();
         }
     }
