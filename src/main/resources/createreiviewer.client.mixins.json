@@ -6,6 +6,7 @@
   "plugin": "dev.chaevsfe.createreiviewer.compat.CompatMixinPlugin",
   "client": [
     "ItemDescriptionRenderThreadMixin",
+    "JeiVanillaRecipeTagsMixin",
     "RrvStackSensitiveMixin",
     "darkgui.AbstractSimiContainerScreenMixin",
     "darkgui.AssemblyScreenMixin",
